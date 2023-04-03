@@ -5,10 +5,10 @@ import { AppService } from "./app.service";
 
 export class AppController{
 
-    constructor(private appSetvice: AppService){}
+    constructor(private appService: AppService){}
 
     @Get('/users')
     getUsers() {
-        return this.appSetvice.getUsers()
+        return this.appService.getUsers()
     }
 }

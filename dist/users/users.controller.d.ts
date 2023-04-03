@@ -1,6 +1,5 @@
 import { CardsService } from 'src/cards/cards.service';
 import { createUserDto } from './dto/create-user.dto';
-import { LogInUserDto } from './dto/logIn-user.dto';
 import { User } from './user.model';
 import { UsersService } from './users.service';
 export declare class UsersController {
@@ -10,5 +9,4 @@ export declare class UsersController {
     create(userDto: createUserDto): Promise<User>;
     getAll(): Promise<User[]>;
     getCardById(user_id: number): Promise<User>;
-    loginUser(dto: LogInUserDto): Promise<User>;
 }

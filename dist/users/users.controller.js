@@ -19,7 +19,6 @@ const api_use_tags_decorator_1 = require("@nestjs/swagger/dist/decorators/api-us
 const card_model_1 = require("../cards/card.model");
 const cards_service_1 = require("../cards/cards.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
-const logIn_user_dto_1 = require("./dto/logIn-user.dto");
 const user_model_1 = require("./user.model");
 const users_service_1 = require("./users.service");
 let UsersController = class UsersController {
@@ -37,10 +36,6 @@ let UsersController = class UsersController {
     }
     async getCardById(user_id) {
         const user = await this.usersService.getUserById(user_id);
-        return user;
-    }
-    async loginUser(dto) {
-        const user = await this.usersService.getUserbyEmail(dto);
         return user;
     }
 };
@@ -70,13 +65,6 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getCardById", null);
-__decorate([
-    (0, common_1.Post)('/login'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [logIn_user_dto_1.LogInUserDto]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "loginUser", null);
 UsersController = __decorate([
     (0, api_use_tags_decorator_1.ApiTags)('Users'),
     (0, common_1.Controller)('users'),

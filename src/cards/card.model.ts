@@ -94,15 +94,24 @@ export class Card extends Model<Card> {
     foreignKey: 'user_id',
     targetKey: 'user_id',
   })
-  
     
-
+  
   @BeforeCreate({})
   static async generateCardNumber(card: Card) {
     const cardNumber = await generateUniqueCardNumber();
     
   }
-
+  
+    @BelongsTo(() => User, 'user_id')
+  user: User;
+  
+    @AfterCreate
+    static async updateCardNumber(card: Card) {
+      const user = await card.$get('user'); // отримати власника карти
+      user.card_number = card.card_number; // оновити номер картки в користувача
+      await user.save(); // зберегти зміни в базі даних
+    }
+  
   
 }
 

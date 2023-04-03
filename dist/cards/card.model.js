@@ -17,6 +17,11 @@ let Card = class Card extends sequelize_typescript_1.Model {
     static async generateCardNumber(card) {
         const cardNumber = await generateUniqueCardNumber();
     }
+    static async updateCardNumber(card) {
+        const user = await card.$get('user');
+        user.card_number = card.card_number;
+        await user.save();
+    }
 };
 __decorate([
     (0, decorators_1.ApiProperty)({ example: '1', description: 'unique identificator' }),
@@ -102,6 +107,10 @@ __decorate([
     __metadata("design:type", String)
 ], Card.prototype, "blockReason", void 0);
 __decorate([
+    (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User, 'user_id'),
+    __metadata("design:type", user_model_1.User)
+], Card.prototype, "user", void 0);
+__decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User, {
         foreignKey: 'user_id',
         targetKey: 'user_id',
@@ -111,6 +120,12 @@ __decorate([
     __metadata("design:paramtypes", [Card]),
     __metadata("design:returntype", Promise)
 ], Card, "generateCardNumber", null);
+__decorate([
+    sequelize_typescript_1.AfterCreate,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Card]),
+    __metadata("design:returntype", Promise)
+], Card, "updateCardNumber", null);
 Card = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'cards' })
 ], Card);

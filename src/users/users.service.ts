@@ -25,20 +25,12 @@ export class UsersService {
     const users = await this.userRepository.findByPk(user_id);
     return users;
   }
-  async getUserbyEmail(dto: LogInUserDto){
+  async getUserbyEmail(email:string){
     const user = await this.userRepository.findOne({
-      where: {
-        email: dto.email,
-      }
+      where: { email },
+      include: {all: true}
     })
-    if (!user) {
-        throw new HttpException('Не шукай того кого нема) -- Здається неправильно ввели емейл!', HttpStatus.BAD_REQUEST);
-      }
- 
     
-    if (user.password !== dto.password) {
-      throw new UnauthorizedException('Але то вже безголовe -- неправильний пароль!');  
-    }
     return user;
   }
 }

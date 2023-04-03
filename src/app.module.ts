@@ -7,7 +7,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { CardsModule } from './cards/cards.module';
+// import { TransactionsModule } from './transactions/transactions.module';
 import * as tedious from 'tedious';
+// import { Transaction } from './transactions/transactions.model';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   controllers: [AppController],
@@ -16,7 +19,7 @@ import * as tedious from 'tedious';
     ConfigModule.forRoot({}),
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
-      inject:[ConfigService],
+      inject: [ConfigService],
       useFactory: () => ({
         dialect: 'mssql',
         dialectModule: tedious,
@@ -38,12 +41,15 @@ import * as tedious from 'tedious';
           encrypt: true,
           trustServerCertificate: false,
         },
-        models: [User, Card],
+        models: [User, Card, ],
         autoLoadModels: true,
       }),
+    
     }),
     UsersModule,
     CardsModule,
+    AuthModule,
+    // TransactionsModule,
   ],
 })
 export class AppModule {}

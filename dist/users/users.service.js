@@ -16,8 +16,6 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const user_model_1 = require("./user.model");
-const exceptions_1 = require("@nestjs/common/exceptions");
-const enums_1 = require("@nestjs/common/enums");
 let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -34,18 +32,11 @@ let UsersService = class UsersService {
         const users = await this.userRepository.findByPk(user_id);
         return users;
     }
-    async getUserbyEmail(dto) {
+    async getUserbyEmail(email) {
         const user = await this.userRepository.findOne({
-            where: {
-                email: dto.email,
-            }
+            where: { email },
+            include: { all: true }
         });
-        if (!user) {
-            throw new common_1.HttpException('Не шукай того кого нема) -- Здається неправильно ввели емейл!', enums_1.HttpStatus.BAD_REQUEST);
-        }
-        if (user.password !== dto.password) {
-            throw new exceptions_1.UnauthorizedException('Але то вже безголовe -- неправильний пароль!');
-        }
         return user;
     }
 };

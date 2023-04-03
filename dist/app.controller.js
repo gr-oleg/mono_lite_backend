@@ -13,11 +13,11 @@ exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
 let AppController = class AppController {
-    constructor(appSetvice) {
-        this.appSetvice = appSetvice;
+    constructor(appService) {
+        this.appService = appService;
     }
     getUsers() {
-        return this.appSetvice.getUsers();
+        return this.appService.getUsers();
     }
 };
 __decorate([

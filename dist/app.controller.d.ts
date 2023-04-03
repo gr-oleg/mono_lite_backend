@@ -1,7 +1,7 @@
 import { AppService } from "./app.service";
 export declare class AppController {
-    private appSetvice;
-    constructor(appSetvice: AppService);
+    private appService;
+    constructor(appService: AppService);
     getUsers(): {
         id: number;
         name: string;

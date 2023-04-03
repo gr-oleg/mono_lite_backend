@@ -48,11 +48,11 @@ export class UsersController {
 
 
 
-  // Authorize and Validate Users
-  @Post('/login')
-  async loginUser(@Body() dto:LogInUserDto) {
-    const user = await this.usersService.getUserbyEmail(dto)
-    return user
-  }
+//   // Authorize and Validate Users
+//   @Post('/login')
+//   async loginUser(@Body() dto:LogInUserDto) {
+//     const user = await this.usersService.getUserbyEmail(dto)
+//     return user
+//   }
 }
 

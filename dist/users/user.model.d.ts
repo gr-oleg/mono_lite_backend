@@ -12,6 +12,7 @@ export declare class User extends Model<User, UserCreationsAttrs> {
     password: string;
     first_name: string;
     second_name: string;
+    card_number: string;
     cards: Card[];
     static user_id: number;
 }

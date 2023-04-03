@@ -1,4 +1,5 @@
 import { Model } from 'sequelize-typescript';
+import { User } from 'src/users/user.model';
 export declare class Card extends Model<Card> {
     card_id: number;
     user_id: number;
@@ -10,6 +11,8 @@ export declare class Card extends Model<Card> {
     blocked: boolean;
     blockReason: string;
     static generateCardNumber(card: Card): Promise<void>;
+    user: User;
+    static updateCardNumber(card: Card): Promise<void>;
 }
 export declare function generateUniqueCardNumber(): Promise<string>;
 export declare function generateCVV(): Promise<string>;

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger/dist/decorators";
-import { BelongsToMany, Column, DataType, HasMany, Model, Table,AfterCreate } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, HasMany, Model, Table,AfterCreate } from "sequelize-typescript";
 import { Card } from "src/cards/card.model";
 
 
@@ -15,47 +15,54 @@ interface UserCreationsAttrs{
 
 @Table({ tableName: 'users' })
 export class User extends Model<User, UserCreationsAttrs> {
-    @ApiProperty({ example: '1', description: 'unique identificator' })
-    @Column({
-        type: DataType.INTEGER,
-        unique: true,
-        autoIncrement: true,
-        primaryKey: true,
-    })
-    user_id: number;
+  @ApiProperty({ example: '1', description: 'unique identificator' })
+  @Column({
+    type: DataType.INTEGER,
+    unique: true,
+    autoIncrement: true,
+    primaryKey: true,
+  })
+  user_id: number;
 
-    @ApiProperty({ example: 'user@gmail.com', description: 'User Email' })
-    @Column({
-        type: DataType.STRING,
-        unique: true,
-        allowNull: false,
-    })
-    email: string;
+  @ApiProperty({ example: 'user@gmail.com', description: 'User Email' })
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+  })
+  email: string;
 
-    @ApiProperty({ example: '2001406', description: "User's password" })
-    @Column({
-        type: DataType.STRING,
-        allowNull: false,
-    })
-    password: string;
+  @ApiProperty({ example: '2001406', description: "User's password" })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  password: string;
 
-    @ApiProperty({ example: 'Vitaliy', description: "User's first name" })
-    @Column({
-        type: DataType.STRING,
-        allowNull: false,
-    })
-    first_name: string;
+  @ApiProperty({ example: 'Vitaliy', description: "User's first name" })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  first_name: string;
 
-    @ApiProperty({ example: 'Havrona', description: "User's second name" })
-    @Column({
-        type: DataType.STRING,
-        allowNull: false,
-    })
+  @ApiProperty({ example: 'Havrona', description: "User's second name" })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
     second_name: string;
     
-    @HasMany(() => Card, 'user_id')
-    cards: Card[];
-    static user_id: number;
 
-    
+  @ApiProperty({ example: '5375 4114 ...', description: "User's card number" })
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  card_number: string;
+
+  
+  @HasMany(() => Card, 'user_id')
+  cards: Card[];
+  static user_id: number;
 }

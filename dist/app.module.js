@@ -17,6 +17,7 @@ const app_service_1 = require("./app.service");
 const users_module_1 = require("./users/users.module");
 const cards_module_1 = require("./cards/cards.module");
 const tedious = require("tedious");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -49,12 +50,13 @@ AppModule = __decorate([
                         encrypt: true,
                         trustServerCertificate: false,
                     },
-                    models: [user_model_1.User, card_model_1.Card],
+                    models: [user_model_1.User, card_model_1.Card,],
                     autoLoadModels: true,
                 }),
             }),
             users_module_1.UsersModule,
             cards_module_1.CardsModule,
+            auth_module_1.AuthModule,
         ],
     })
 ], AppModule);
