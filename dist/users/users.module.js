@@ -20,7 +20,7 @@ let UsersModule = class UsersModule {
 UsersModule = __decorate([
     (0, common_1.Module)({
         controllers: [users_controller_1.UsersController],
-        providers: [users_service_1.UsersService, cards_service_1.CardsService,],
+        providers: [users_service_1.UsersService, cards_service_1.CardsService],
         imports: [
             sequelize_1.SequelizeModule.forFeature([user_model_1.User, card_model_1.Card]),
             (0, common_1.forwardRef)(() => auth_module_1.AuthModule)

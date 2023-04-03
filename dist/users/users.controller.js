@@ -28,7 +28,6 @@ let UsersController = class UsersController {
     }
     async create(userDto) {
         const newUser = await this.usersService.createUser(userDto);
-        await this.cardService.createCard(newUser.user_id);
         return newUser;
     }
     getAll() {

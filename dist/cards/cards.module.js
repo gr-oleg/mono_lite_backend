@@ -13,6 +13,7 @@ const user_model_1 = require("../users/user.model");
 const card_model_1 = require("./card.model");
 const cards_controller_1 = require("./cards.controller");
 const cards_service_1 = require("./cards.service");
+const auth_module_1 = require("../auth/auth.module");
 let CardsModule = class CardsModule {
 };
 CardsModule = __decorate([
@@ -20,7 +21,11 @@ CardsModule = __decorate([
         controllers: [cards_controller_1.CardsController],
         providers: [cards_service_1.CardsService],
         imports: [
+            (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
             sequelize_1.SequelizeModule.forFeature([card_model_1.Card, user_model_1.User])
+        ],
+        exports: [
+            cards_service_1.CardsService
         ]
     })
 ], CardsModule);

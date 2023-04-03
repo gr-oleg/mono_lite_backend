@@ -4,12 +4,14 @@ import { createUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs'
 import { User } from 'src/users/user.model';
+import { CardsService } from 'src/cards/cards.service';
 
 @Injectable()
 export class AuthService {
 
     constructor(private userService: UsersService,
-    private jwtService: JwtService){}
+        private jwtService: JwtService,
+    private cardService: CardsService) { }
 
     async login(userDto: createUserDto) {
         const user = await this.validateUser(userDto);
@@ -23,7 +25,8 @@ export class AuthService {
       }
  
         const hashPassword = await bcrypt.hash(userDto.password, 5);
-        const user = await this.userService.createUser({ ...userDto, password: hashPassword })
+        const user = await this.userService.createUser({ ...userDto, password: hashPassword });
+        await this.cardService.createCard(user.user_id);
         return this.generateToken(user)
     }
 

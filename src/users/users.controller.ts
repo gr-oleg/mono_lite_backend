@@ -22,10 +22,6 @@ export class UsersController {
   @Post()
   async create(@Body() userDto: createUserDto) {
     const newUser = await this.usersService.createUser(userDto);
-
-    // Create a new card for the user
-    await this.cardService.createCard(newUser.user_id);
-
     return newUser;
   }
 

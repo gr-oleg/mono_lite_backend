@@ -16,10 +16,12 @@ const create_user_dto_1 = require("../users/dto/create-user.dto");
 const users_service_1 = require("../users/users.service");
 const bcrypt = require("bcryptjs");
 const user_model_1 = require("../users/user.model");
+const cards_service_1 = require("../cards/cards.service");
 let AuthService = class AuthService {
-    constructor(userService, jwtService) {
+    constructor(userService, jwtService, cardService) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.cardService = cardService;
     }
     async login(userDto) {
         const user = await this.validateUser(userDto);
@@ -32,6 +34,7 @@ let AuthService = class AuthService {
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         const user = await this.userService.createUser(Object.assign(Object.assign({}, userDto), { password: hashPassword }));
+        await this.cardService.createCard(user.user_id);
         return this.generateToken(user);
     }
     async generateToken(user) {
@@ -57,7 +60,8 @@ let AuthService = class AuthService {
 AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_1.UsersService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        cards_service_1.CardsService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map
