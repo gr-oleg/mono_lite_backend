@@ -7,5 +7,6 @@ export declare class CardsService {
     getCardById(card_id: number): Promise<Card>;
     createCard(user_id: number): Promise<Card>;
     getAllCards(): Promise<Card[]>;
-    getCardsByUserId(user_id: number): Promise<User[]>;
+    getCardsByUserId(user_id: number): Promise<Card>;
+    getCardByNumber(card_number: string): Promise<Card>;
 }

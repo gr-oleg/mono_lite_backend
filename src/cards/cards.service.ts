@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Card, generateCVV, generateUniqueCardNumber } from './card.model';
 import { User } from '../users/user.model';
-import { Identifier } from 'sequelize';
-import { CreateCardDto } from './dto/create-card.dto';
 
 @Injectable()
 export class CardsService {
@@ -44,11 +42,19 @@ export class CardsService {
   }
 
   async getCardsByUserId(user_id: number) {
-    const user = await this.userModel.findAll({ where: { user_id } });
-    if (!user) {
+    const card = await this.cardModel.findOne({ where: { user_id } });
+    if (!card) {
       // handle error - user not found
     }
 
-    return user;
+    return card;
+  }
+  async getCardByNumber(card_number: string) {
+    const card = await this.cardModel.findOne({ where:{ card_number } });
+    if (!card) {
+      // handle error - user not found
+    }
+
+    return card;
   }
 }

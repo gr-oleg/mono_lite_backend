@@ -8,6 +8,7 @@ import {
   Model,
   Table,
   AfterCreate,
+  HasMany,
 } from 'sequelize-typescript';
 import { User } from 'src/users/user.model';
 
@@ -94,6 +95,8 @@ export class Card extends Model<Card> {
     foreignKey: 'user_id',
     targetKey: 'user_id',
   })
+    
+    // @HasMany(() => )
     
   
   @BeforeCreate({})

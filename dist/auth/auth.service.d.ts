@@ -7,6 +7,13 @@ export declare class AuthService {
     private jwtService;
     private cardService;
     constructor(userService: UsersService, jwtService: JwtService, cardService: CardsService);
+    private curToken;
+    getUserInfoFromToken(): Promise<{
+        id: any;
+        email: any;
+        first_name: any;
+        second_name: any;
+    }>;
     login(userDto: createUserDto): Promise<{
         token: string;
     }>;

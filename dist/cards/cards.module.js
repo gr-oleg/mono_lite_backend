@@ -14,6 +14,7 @@ const card_model_1 = require("./card.model");
 const cards_controller_1 = require("./cards.controller");
 const cards_service_1 = require("./cards.service");
 const auth_module_1 = require("../auth/auth.module");
+const transactions_module_1 = require("../transactions/transactions.module");
 let CardsModule = class CardsModule {
 };
 CardsModule = __decorate([
@@ -22,6 +23,7 @@ CardsModule = __decorate([
         providers: [cards_service_1.CardsService],
         imports: [
             (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
+            (0, common_1.forwardRef)(() => transactions_module_1.TransactionsModule),
             sequelize_1.SequelizeModule.forFeature([card_model_1.Card, user_model_1.User])
         ],
         exports: [

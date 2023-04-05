@@ -7,14 +7,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { CardsModule } from './cards/cards.module';
-// import { TransactionsModule } from './transactions/transactions.module';
+import { TransactionsModule } from './transactions/transactions.module';
 import * as tedious from 'tedious';
-// import { Transaction } from './transactions/transactions.model';
+import { Transaction } from './transactions/transactions.model';
 import { AuthModule } from './auth/auth.module';
+import { PiggybankModule } from './piggybank/piggybank.module';
+import { CashbackService } from './cashback/cashback.service';
+import { CashbackModule } from './cashback/cashback.module';
+
 
 @Module({
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CashbackService],
   imports: [
     ConfigModule.forRoot({}),
     SequelizeModule.forRootAsync({
@@ -41,7 +45,7 @@ import { AuthModule } from './auth/auth.module';
           encrypt: true,
           trustServerCertificate: false,
         },
-        models: [User, Card, ],
+        models: [User, Card,Transaction ],
         autoLoadModels: true,
       }),
     
@@ -49,7 +53,9 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     CardsModule,
     AuthModule,
-    // TransactionsModule,
+    TransactionsModule,
+    PiggybankModule,
+    CashbackModule,
   ],
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 import { Body, Controller, Post ,Get,Param} from '@nestjs/common';
-import { CreateCardDto } from './dto/create-card.dto';
+import {CreateCardDto} from './dto/create-card.dto'
 import { CardsService } from './cards.service';
 
 
@@ -22,6 +22,11 @@ export class CardsController {
     @Get()
     getAll() {
         return this.cardsService.getAllCards()
-    }
+  }
+  
+  // @Post('/test')
+  // async getCardByNumber(@Body() dto:CreateCardDto) {
+  //   return this.cardsService.getCardByNumber(dto.card_number);
+  // }
     
 }

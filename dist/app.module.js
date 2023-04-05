@@ -16,8 +16,11 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const users_module_1 = require("./users/users.module");
 const cards_module_1 = require("./cards/cards.module");
+const transactions_module_1 = require("./transactions/transactions.module");
 const tedious = require("tedious");
+const transactions_model_1 = require("./transactions/transactions.model");
 const auth_module_1 = require("./auth/auth.module");
+const piggybank_module_1 = require("./piggybank/piggybank.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -50,13 +53,15 @@ AppModule = __decorate([
                         encrypt: true,
                         trustServerCertificate: false,
                     },
-                    models: [user_model_1.User, card_model_1.Card,],
+                    models: [user_model_1.User, card_model_1.Card, transactions_model_1.Transaction],
                     autoLoadModels: true,
                 }),
             }),
             users_module_1.UsersModule,
             cards_module_1.CardsModule,
             auth_module_1.AuthModule,
+            transactions_module_1.TransactionsModule,
+            piggybank_module_1.PiggybankModule,
         ],
     })
 ], AppModule);

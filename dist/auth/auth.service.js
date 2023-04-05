@@ -23,9 +23,16 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
         this.cardService = cardService;
     }
+    async getUserInfoFromToken() {
+        const decodedToken = await this.jwtService.verifyAsync((await this.curToken).token);
+        const { id, email, first_name, second_name } = decodedToken;
+        return { id, email, first_name, second_name };
+    }
     async login(userDto) {
         const user = await this.validateUser(userDto);
-        return this.generateToken(user);
+        const token = this.generateToken(user);
+        this.curToken = token;
+        return token;
     }
     async signUp(userDto) {
         const candidate = await this.userService.getUserbyEmail(userDto.email);
@@ -35,12 +42,19 @@ let AuthService = class AuthService {
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         const user = await this.userService.createUser(Object.assign(Object.assign({}, userDto), { password: hashPassword }));
         await this.cardService.createCard(user.user_id);
-        return this.generateToken(user);
+        const token = this.generateToken(user);
+        this.curToken = token;
+        return token;
     }
     async generateToken(user) {
-        const payload = { id: user.user_id, email: user.email, first_name: user.first_name, second_name: user.second_name };
+        const payload = {
+            id: user.user_id,
+            email: user.email,
+            first_name: user.first_name,
+            second_name: user.second_name,
+        };
         return {
-            token: this.jwtService.sign(payload)
+            token: this.jwtService.sign(payload),
         };
     }
     async validateUser(userDto) {
