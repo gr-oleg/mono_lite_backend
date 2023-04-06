@@ -12,7 +12,7 @@ import { Op } from 'sequelize';
 @Injectable()
 export class TransactionsService {
   constructor(
-    @InjectModel(Card) private cardRepository: Card,
+    @InjectModel(Card) private cardRepository: typeof Card,
     @InjectModel(Transaction) private transactionModel: typeof Transaction,
     private authService: AuthService,
     private cardService: CardsService,
@@ -167,7 +167,7 @@ export class TransactionsService {
         { blocked: true, blockReason: "Overdrafting" },
         { where: { card_id: currCard.card_id } }
       );
-      throw new HttpException('Догралися! - картку заблоковано!)', HttpStatus.OK);
+      throw new HttpException('Догралися! - картку заблоковано!)', HttpStatus.UNAUTHORIZED);
     }
       
   }

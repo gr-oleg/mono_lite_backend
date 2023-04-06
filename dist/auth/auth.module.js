@@ -12,8 +12,6 @@ const auth_service_1 = require("./auth.service");
 const auth_controller_1 = require("./auth.controller");
 const users_module_1 = require("../users/users.module");
 const jwt_1 = require("@nestjs/jwt");
-const users_service_1 = require("../users/users.service");
-const cards_service_1 = require("../cards/cards.service");
 const cards_module_1 = require("../cards/cards.module");
 let AuthModule = class AuthModule {
 };

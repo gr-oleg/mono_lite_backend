@@ -21,6 +21,8 @@ const tedious = require("tedious");
 const transactions_model_1 = require("./transactions/transactions.model");
 const auth_module_1 = require("./auth/auth.module");
 const piggybank_module_1 = require("./piggybank/piggybank.module");
+const cashback_module_1 = require("./cashback/cashback.module");
+const cashback_model_1 = require("./cashback/cashback.model");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -53,7 +55,7 @@ AppModule = __decorate([
                         encrypt: true,
                         trustServerCertificate: false,
                     },
-                    models: [user_model_1.User, card_model_1.Card, transactions_model_1.Transaction],
+                    models: [user_model_1.User, card_model_1.Card, transactions_model_1.Transaction, cashback_model_1.CashBack],
                     autoLoadModels: true,
                 }),
             }),
@@ -62,6 +64,7 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             transactions_module_1.TransactionsModule,
             piggybank_module_1.PiggybankModule,
+            cashback_module_1.CashbackModule,
         ],
     })
 ], AppModule);

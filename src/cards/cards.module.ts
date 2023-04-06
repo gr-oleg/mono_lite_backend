@@ -6,8 +6,8 @@ import { CardsController } from './cards.controller';
 import { CardsService } from './cards.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { TransactionsModule } from 'src/transactions/transactions.module';
-// import { CashbackModule } from 'src/cashback/cashback.module';
-// import { CashBack } from 'src/cashback/cashback.model';
+import { CashbackModule } from 'src/cashback/cashback.module';
+
 
 
 
@@ -18,7 +18,7 @@ import { TransactionsModule } from 'src/transactions/transactions.module';
   imports: [
     forwardRef(()=> AuthModule),
     forwardRef(()=> TransactionsModule),
-    // forwardRef(()=> CashbackModule),
+    forwardRef(()=> CashbackModule),
     SequelizeModule.forFeature([Card,User])
   ],
   exports: [

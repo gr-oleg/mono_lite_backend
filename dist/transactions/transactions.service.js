@@ -116,7 +116,7 @@ let TransactionsService = class TransactionsService {
         }
         else {
             await this.cardRepository.update({ blocked: true, blockReason: "Overdrafting" }, { where: { card_id: currCard.card_id } });
-            throw new common_1.HttpException('Догралися! - картку заблоковано!)', common_1.HttpStatus.OK);
+            throw new common_1.HttpException('Догралися! - картку заблоковано!)', common_1.HttpStatus.UNAUTHORIZED);
         }
     }
     async simulateWithdrawal(dto) {
@@ -140,7 +140,7 @@ TransactionsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(card_model_1.Card)),
     __param(1, (0, sequelize_1.InjectModel)(transactions_model_1.Transaction)),
-    __metadata("design:paramtypes", [card_model_1.Card, Object, auth_service_1.AuthService,
+    __metadata("design:paramtypes", [Object, Object, auth_service_1.AuthService,
         cards_service_1.CardsService])
 ], TransactionsService);
 exports.TransactionsService = TransactionsService;

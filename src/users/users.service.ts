@@ -2,11 +2,9 @@ import { Injectable,HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { createUserDto } from './dto/create-user.dto';
-import { LogInUserDto } from './dto/logIn-user.dto';
+
 import { User } from './user.model';
 
-import { NotFoundException, UnauthorizedException } from '@nestjs/common/exceptions';
-import { HttpStatus } from '@nestjs/common/enums';
 
 @Injectable()
 export class UsersService {

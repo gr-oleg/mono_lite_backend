@@ -8,7 +8,7 @@ export declare class TransactionsService {
     private transactionModel;
     private authService;
     private cardService;
-    constructor(cardRepository: Card, transactionModel: typeof Transaction, authService: AuthService, cardService: CardsService);
+    constructor(cardRepository: typeof Card, transactionModel: typeof Transaction, authService: AuthService, cardService: CardsService);
     createTransaction(dto: createTransactionDto): Promise<Transaction>;
     getSenderCard(): Promise<Card>;
     getReceiverCard(dto: createTransactionDto): Promise<Card>;
