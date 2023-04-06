@@ -10,8 +10,8 @@ export declare class TransactionsService {
     private cardService;
     constructor(cardRepository: Card, transactionModel: typeof Transaction, authService: AuthService, cardService: CardsService);
     createTransaction(dto: createTransactionDto): Promise<Transaction>;
-    private getSenderCard;
-    private getReceiverCard;
+    getSenderCard(): Promise<Card>;
+    getReceiverCard(dto: createTransactionDto): Promise<Card>;
     getAllTransactions(): Promise<Transaction[]>;
     simulateDeposit(dto: createTransactionDto): Promise<Transaction>;
     simulateWithdrawal(dto: createTransactionDto): Promise<Transaction>;

@@ -9,27 +9,22 @@ import {
 } from 'sequelize-typescript';
 import { Card } from '../cards/card.model';
 
-
-
 enum TransactionStatus {
   SUCCESSFUL = 'SUCCESSFUL',
   FAILED = 'FAILED',
 }
 
 interface TransactionCreateAttrs {
-    sender_card_id: number;
-    receiver_card_id: number;
-    receiver_card_number: string; 
-    receiver_full_name: string;
-    transaction_amount: number;  
-    transaction_description: string;  
-    transaction_type: string;
-
-    
-
+  sender_card_id: number;
+  receiver_card_id: number;
+  receiver_card_number: string;
+  receiver_full_name: string;
+  transaction_amount: number;
+  transaction_description: string;
+  transaction_type: string;
 }
 
-@Table
+@Table({ tableName: 'Transaction' })
 export class Transaction extends Model<Transaction, TransactionCreateAttrs> {
   @Column({
     type: DataType.INTEGER,
@@ -39,7 +34,7 @@ export class Transaction extends Model<Transaction, TransactionCreateAttrs> {
   })
   transaction_id: number;
 
-//   @ForeignKey(() => Card)
+  //   @ForeignKey(() => Card)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -53,24 +48,22 @@ export class Transaction extends Model<Transaction, TransactionCreateAttrs> {
   })
   receiver_card_id: number;
 
- 
-    
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-    receiver_card_number: string;
-  
-    @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-    receiver_full_name: string;
+  receiver_card_number: string;
 
   @Column({
     type: DataType.STRING,
-      allowNull: true,
-    defaultValue: ''
+    allowNull: false,
+  })
+  receiver_full_name: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+    defaultValue: '',
   })
   transaction_description: string;
 
@@ -85,7 +78,6 @@ export class Transaction extends Model<Transaction, TransactionCreateAttrs> {
     allowNull: false,
   })
   transaction_type: string;
-  
 
   @Column({
     type: DataType.DATE,

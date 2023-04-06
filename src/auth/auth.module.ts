@@ -13,6 +13,7 @@ import { CardsModule } from 'src/cards/cards.module';
   imports: [
     forwardRef(() => UsersModule),
     forwardRef(() => CardsModule),
+
     JwtModule.register({
       secret: process.env.PRIVATE_KEY || 'SECRET',
       signOptions: {

@@ -6,7 +6,7 @@ import { createTransactionDto } from './dto/create-transaction.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { CardsService } from 'src/cards/cards.service';
 import { Op } from 'sequelize';
-import { CashbackService } from 'src/cashback/cashback.service';
+// import { CashbackService } from 'src/cashback/cashback.service';
 
 
 @Injectable()
@@ -16,7 +16,7 @@ export class TransactionsService {
     @InjectModel(Transaction) private transactionModel: typeof Transaction,
     private authService: AuthService,
     private cardService: CardsService,
-    private cashBackService: CashbackService,
+    // private cashBackService: CashbackService,
   ) {}
 
   async createTransaction(dto: createTransactionDto) {
@@ -185,7 +185,7 @@ export class TransactionsService {
       { where: { card_id: 3 } },
     );
 
-    const cashback = await this.cashBackService.updateCashBackBalance(amount);
+    // const cashback = await this.cashBackService.updateCashBackBalance(amount);
 
     const createdTransaction = await this.transactionModel.create({
       sender_card_id: currCard.card_id,
@@ -196,6 +196,6 @@ export class TransactionsService {
       transaction_description: 'Симуляція витрат',
       transaction_type: 'EXPENSE'
     });
-    return [createdTransaction,cashback];
+    return createdTransaction;
   }
 }

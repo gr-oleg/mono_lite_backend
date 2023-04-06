@@ -25,6 +25,9 @@ TransactionsModule = __decorate([
             (0, common_1.forwardRef)(() => cards_module_1.CardsModule),
             (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
             sequelize_1.SequelizeModule.forFeature([transactions_model_1.Transaction, card_model_1.Card])
+        ],
+        exports: [
+            transactions_service_1.TransactionsService
         ]
     })
 ], TransactionsModule);

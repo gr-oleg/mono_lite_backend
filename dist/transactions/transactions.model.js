@@ -61,7 +61,7 @@ __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING,
         allowNull: true,
-        defaultValue: ''
+        defaultValue: '',
     }),
     __metadata("design:type", String)
 ], Transaction.prototype, "transaction_description", void 0);
@@ -96,7 +96,7 @@ __decorate([
     __metadata("design:type", String)
 ], Transaction.prototype, "transaction_status", void 0);
 Transaction = __decorate([
-    sequelize_typescript_1.Table
+    (0, sequelize_typescript_1.Table)({ tableName: 'Transaction' })
 ], Transaction);
 exports.Transaction = Transaction;
 //# sourceMappingURL=transactions.model.js.map

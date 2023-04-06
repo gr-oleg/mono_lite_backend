@@ -12,13 +12,13 @@ import * as tedious from 'tedious';
 import { Transaction } from './transactions/transactions.model';
 import { AuthModule } from './auth/auth.module';
 import { PiggybankModule } from './piggybank/piggybank.module';
-import { CashbackService } from './cashback/cashback.service';
-import { CashbackModule } from './cashback/cashback.module';
-
+// import { CashbackService } from './cashback/cashback.service';
+// import { CashbackModule } from './cashback/cashback.module';
+// import { CashBack } from './cashback/cashback.model';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, CashbackService],
+  providers: [AppService],
   imports: [
     ConfigModule.forRoot({}),
     SequelizeModule.forRootAsync({
@@ -45,17 +45,16 @@ import { CashbackModule } from './cashback/cashback.module';
           encrypt: true,
           trustServerCertificate: false,
         },
-        models: [User, Card,Transaction ],
+        models: [User, Card, Transaction],
         autoLoadModels: true,
       }),
-    
     }),
     UsersModule,
     CardsModule,
     AuthModule,
     TransactionsModule,
     PiggybankModule,
-    CashbackModule,
+    // CashbackModule,
   ],
 })
 export class AppModule {}
