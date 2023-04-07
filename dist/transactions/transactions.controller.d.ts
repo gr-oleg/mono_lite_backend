@@ -6,5 +6,6 @@ export declare class TransactionsController {
     createTransaction(dto: createTransactionDto): Promise<import("./transactions.model").Transaction>;
     simulateDeposit(dto: createTransactionDto): Promise<import("./transactions.model").Transaction>;
     simulateWithdrawal(dto: createTransactionDto): Promise<import("./transactions.model").Transaction>;
-    getAll(): Promise<import("./transactions.model").Transaction[]>;
+    getUserTransactions(): Promise<import("./transactions.model").Transaction[]>;
+    getAllTransactions(): Promise<import("./transactions.model").Transaction[]>;
 }

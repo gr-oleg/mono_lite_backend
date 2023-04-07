@@ -28,7 +28,7 @@ let TransactionsService = class TransactionsService {
         this.cardService = cardService;
     }
     async createTransaction(dto) {
-        const senderCard = await this.getSenderCard();
+        const senderCard = await this.getCurrentCard();
         const receiverCard = await this.getReceiverCard(dto);
         if (senderCard.blocked) {
             throw new common_1.HttpException('Ви наказані!) - картку заблоковано!)', common_1.HttpStatus.OK);
@@ -54,7 +54,7 @@ let TransactionsService = class TransactionsService {
                 receiver_full_name: full_name,
                 transaction_amount: amount,
                 transaction_description: description,
-                transaction_type: type
+                transaction_type: type,
             }, { transaction });
             await transaction.commit();
             return createdTransaction;
@@ -64,7 +64,7 @@ let TransactionsService = class TransactionsService {
             throw error;
         }
     }
-    async getSenderCard() {
+    async getCurrentCard() {
         const sender = await this.authService.getUserInfoFromToken();
         const senderCard = await this.cardService.getCardById(sender.id);
         return senderCard;
@@ -79,20 +79,20 @@ let TransactionsService = class TransactionsService {
         }
         return receiverCard;
     }
-    async getAllTransactions() {
-        const userCard = await this.getSenderCard();
+    async getUsersTransactions() {
+        const userCard = await this.getCurrentCard();
         const transactions = await this.transactionModel.findAll({
             where: {
                 [sequelize_2.Op.or]: [
                     { sender_card_id: userCard.card_id },
-                    { receiver_card_id: userCard.card_id }
-                ]
-            }
+                    { receiver_card_id: userCard.card_id },
+                ],
+            },
         });
         return transactions;
     }
     async simulateDeposit(dto) {
-        const currCard = await this.getSenderCard();
+        const currCard = await this.getCurrentCard();
         const amount = dto.transaction_amount;
         if (amount > 50000) {
             throw new common_1.HttpException('Нічого не злипнеться?!🍑', common_1.HttpStatus.BAD_REQUEST);
@@ -115,12 +115,12 @@ let TransactionsService = class TransactionsService {
             return createdTransaction;
         }
         else {
-            await this.cardRepository.update({ blocked: true, blockReason: "Overdrafting" }, { where: { card_id: currCard.card_id } });
+            await this.cardRepository.update({ blocked: true, blockReason: 'Overdrafting' }, { where: { card_id: currCard.card_id } });
             throw new common_1.HttpException('Догралися! - картку заблоковано!)', common_1.HttpStatus.UNAUTHORIZED);
         }
     }
     async simulateWithdrawal(dto) {
-        const currCard = await this.getSenderCard();
+        const currCard = await this.getCurrentCard();
         const amount = dto.transaction_amount;
         await this.cardRepository.update({ card_balance: currCard.card_balance - amount }, { where: { card_id: currCard.card_id } });
         await this.cardRepository.update({ card_balance: 10000000 }, { where: { card_id: 3 } });
@@ -131,9 +131,13 @@ let TransactionsService = class TransactionsService {
             receiver_full_name: 'Expension 💵',
             transaction_amount: amount,
             transaction_description: 'Симуляція витрат',
-            transaction_type: 'EXPENSE'
+            transaction_type: 'EXPENSE',
         });
         return createdTransaction;
+    }
+    async getAllTransactions() {
+        const transactions = await this.transactionModel.findAll();
+        return transactions;
     }
 };
 TransactionsService = __decorate([

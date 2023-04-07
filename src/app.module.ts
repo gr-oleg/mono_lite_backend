@@ -56,5 +56,8 @@ import { CashBack } from './cashback/cashback.model';
     PiggybankModule,
     CashbackModule,
   ],
+  exports: [
+    AuthModule
+  ]
 })
 export class AppModule {}

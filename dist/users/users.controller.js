@@ -22,9 +22,8 @@ const create_user_dto_1 = require("./dto/create-user.dto");
 const user_model_1 = require("./user.model");
 const users_service_1 = require("./users.service");
 let UsersController = class UsersController {
-    constructor(usersService, cardService) {
+    constructor(usersService) {
         this.usersService = usersService;
-        this.cardService = cardService;
     }
     async create(userDto) {
         const newUser = await this.usersService.createUser(userDto);
@@ -67,8 +66,7 @@ __decorate([
 UsersController = __decorate([
     (0, api_use_tags_decorator_1.ApiTags)('Users'),
     (0, common_1.Controller)('users'),
-    __metadata("design:paramtypes", [users_service_1.UsersService,
-        cards_service_1.CardsService])
+    __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
 exports.UsersController = UsersController;
 //# sourceMappingURL=users.controller.js.map

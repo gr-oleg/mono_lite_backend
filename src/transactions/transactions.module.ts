@@ -9,6 +9,10 @@ import { AuthModule } from 'src/auth/auth.module';
 import { CashbackModule } from 'src/cashback/cashback.module';
 import { CashbackService } from 'src/cashback/cashback.service';
 import { CashBack } from 'src/cashback/cashback.model';
+import { CardsService } from 'src/cards/cards.service';
+import { AuthService } from 'src/auth/auth.service';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/user.model';
 // import { CashBack } from 'src/cashback/cashback.model';
 
 @Module({
@@ -18,7 +22,7 @@ import { CashBack } from 'src/cashback/cashback.model';
         forwardRef(() => CardsModule),
         forwardRef(() => AuthModule),
         forwardRef(() => CashbackModule),
-    SequelizeModule.forFeature([Transaction,Card,CashBack])
+    SequelizeModule.forFeature([Transaction,Card,CashBack,User])
   ],
   exports: [
       TransactionsService

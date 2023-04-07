@@ -66,6 +66,9 @@ AppModule = __decorate([
             piggybank_module_1.PiggybankModule,
             cashback_module_1.CashbackModule,
         ],
+        exports: [
+            auth_module_1.AuthModule
+        ]
     })
 ], AppModule);
 exports.AppModule = AppModule;

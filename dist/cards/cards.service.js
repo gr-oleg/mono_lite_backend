@@ -51,14 +51,10 @@ let CardsService = class CardsService {
     }
     async getCardsByUserId(user_id) {
         const card = await this.cardModel.findOne({ where: { user_id } });
-        if (!card) {
-        }
         return card;
     }
     async getCardByNumber(card_number) {
         const card = await this.cardModel.findOne({ where: { card_number } });
-        if (!card) {
-        }
         return card;
     }
 };

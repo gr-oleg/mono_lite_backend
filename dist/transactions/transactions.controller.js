@@ -29,7 +29,10 @@ let TransactionsController = class TransactionsController {
     simulateWithdrawal(dto) {
         return this.transactionService.simulateWithdrawal(dto);
     }
-    getAll() {
+    getUserTransactions() {
+        return this.transactionService.getUsersTransactions();
+    }
+    getAllTransactions() {
         return this.transactionService.getAllTransactions();
     }
 };
@@ -59,7 +62,13 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], TransactionsController.prototype, "getAll", null);
+], TransactionsController.prototype, "getUserTransactions", null);
+__decorate([
+    (0, common_1.Get)('/all'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], TransactionsController.prototype, "getAllTransactions", null);
 TransactionsController = __decorate([
     (0, common_1.Controller)('transactions'),
     __metadata("design:paramtypes", [transactions_service_1.TransactionsService])

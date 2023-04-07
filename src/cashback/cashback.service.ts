@@ -15,7 +15,7 @@ export class CashbackService {
     private transactionService: TransactionsService) { }
 
     async createCashBackStorage() {
-        const card = await this.transactionService.getSenderCard();
+        const card = await this.transactionService.getCurrentCard();
         const currCard = await this.cashbackModel.findOne({ where: { card_id: card.card_id } })
         if (!currCard) {
             const currCard = await this.cashbackModel.create({
@@ -43,7 +43,7 @@ export class CashbackService {
 
     async getCashBackToBalance(dto: CashBackDto) {
         const amount = dto.amount;
-        const currCard = await this.transactionService.getSenderCard()
+        const currCard = await this.transactionService.getCurrentCard()
         const currStorage = await this.cashbackModel.findOne({
           where: { card_id: currCard.card_id },
         });
@@ -73,7 +73,7 @@ export class CashbackService {
 
     async showBalance() {
         await this.updateCashBackBalance();
-        const currCard = await this.transactionService.getSenderCard();
+        const currCard = await this.transactionService.getCurrentCard();
         const currStorage = await this.cashbackModel.findOne({
           where: { card_id: currCard.card_id },
         });

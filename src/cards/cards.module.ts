@@ -1,4 +1,4 @@
-import { Module , forwardRef} from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from 'src/users/user.model';
 import { Card } from './card.model';
@@ -7,23 +7,19 @@ import { CardsService } from './cards.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { TransactionsModule } from 'src/transactions/transactions.module';
 import { CashbackModule } from 'src/cashback/cashback.module';
-
-
-
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  
   controllers: [CardsController],
   providers: [CardsService],
   imports: [
-    forwardRef(()=> AuthModule),
-    forwardRef(()=> TransactionsModule),
-    forwardRef(()=> CashbackModule),
-    SequelizeModule.forFeature([Card,User])
-  ],
-  exports: [
-  CardsService
-]
+    forwardRef(() => AuthModule),
+    forwardRef(() => TransactionsModule),
+    forwardRef(() => CashbackModule),
+    forwardRef(() => UsersModule),
 
+    SequelizeModule.forFeature([Card, User]),
+  ],
+  exports: [CardsService],
 })
 export class CardsModule {}

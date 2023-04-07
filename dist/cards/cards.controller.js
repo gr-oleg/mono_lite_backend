@@ -16,9 +16,11 @@ exports.CardsController = void 0;
 const common_1 = require("@nestjs/common");
 const create_card_dto_1 = require("./dto/create-card.dto");
 const cards_service_1 = require("./cards.service");
+const transactions_service_1 = require("../transactions/transactions.service");
 let CardsController = class CardsController {
-    constructor(cardsService) {
+    constructor(cardsService, transactionService) {
         this.cardsService = cardsService;
+        this.transactionService = transactionService;
     }
     async create(dto) {
         const user_id = Number(dto);
@@ -30,6 +32,9 @@ let CardsController = class CardsController {
     }
     getAll() {
         return this.cardsService.getAllCards();
+    }
+    getUserCard() {
+        return this.transactionService.getCurrentCard();
     }
 };
 __decorate([
@@ -47,14 +52,21 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CardsController.prototype, "getCardById", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('/all'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CardsController.prototype, "getAll", null);
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], CardsController.prototype, "getUserCard", null);
 CardsController = __decorate([
     (0, common_1.Controller)('cards'),
-    __metadata("design:paramtypes", [cards_service_1.CardsService])
+    __metadata("design:paramtypes", [cards_service_1.CardsService,
+        transactions_service_1.TransactionsService])
 ], CardsController);
 exports.CardsController = CardsController;
 //# sourceMappingURL=cards.controller.js.map

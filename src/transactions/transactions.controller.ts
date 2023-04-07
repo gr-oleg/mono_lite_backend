@@ -23,7 +23,12 @@ constructor(private transactionService: TransactionsService){}
     }
 
     @Get()
-    getAll() {
+    getUserTransactions() {
+        return this.transactionService.getUsersTransactions();
+    }
+    
+    @Get('/all')
+    getAllTransactions() {
         return this.transactionService.getAllTransactions();
     }
 }

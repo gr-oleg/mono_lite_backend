@@ -16,6 +16,7 @@ const cards_service_1 = require("./cards.service");
 const auth_module_1 = require("../auth/auth.module");
 const transactions_module_1 = require("../transactions/transactions.module");
 const cashback_module_1 = require("../cashback/cashback.module");
+const users_module_1 = require("../users/users.module");
 let CardsModule = class CardsModule {
 };
 CardsModule = __decorate([
@@ -26,11 +27,10 @@ CardsModule = __decorate([
             (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
             (0, common_1.forwardRef)(() => transactions_module_1.TransactionsModule),
             (0, common_1.forwardRef)(() => cashback_module_1.CashbackModule),
-            sequelize_1.SequelizeModule.forFeature([card_model_1.Card, user_model_1.User])
+            (0, common_1.forwardRef)(() => users_module_1.UsersModule),
+            sequelize_1.SequelizeModule.forFeature([card_model_1.Card, user_model_1.User]),
         ],
-        exports: [
-            cards_service_1.CardsService
-        ]
+        exports: [cards_service_1.CardsService],
     })
 ], CardsModule);
 exports.CardsModule = CardsModule;

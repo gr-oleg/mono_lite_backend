@@ -6,8 +6,6 @@ import { createTransactionDto } from './dto/create-transaction.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { CardsService } from 'src/cards/cards.service';
 import { Op } from 'sequelize';
-// import { CashbackService } from 'src/cashback/cashback.service';
-
 
 @Injectable()
 export class TransactionsService {
@@ -16,11 +14,10 @@ export class TransactionsService {
     @InjectModel(Transaction) private transactionModel: typeof Transaction,
     private authService: AuthService,
     private cardService: CardsService,
-    // private cashBackService: CashbackService,
   ) {}
 
   async createTransaction(dto: createTransactionDto) {
-    const senderCard = await this.getSenderCard();
+    const senderCard = await this.getCurrentCard();
     const receiverCard = await this.getReceiverCard(dto);
 
     if (senderCard.blocked) {
@@ -31,10 +28,7 @@ export class TransactionsService {
     }
 
     if (receiverCard.card_number === senderCard.card_number) {
-      throw new HttpException(
-        'Ти шо,самий мудрий ?!',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('Ти шо,самий мудрий ?!', HttpStatus.BAD_REQUEST);
     }
     const full_name =
       receiverCard.owner_name + ' ' + receiverCard.owner_surname;
@@ -47,7 +41,7 @@ export class TransactionsService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    
+
     const description = dto.transaction_description;
     const type = 'TRANSFER';
 
@@ -73,7 +67,7 @@ export class TransactionsService {
           receiver_full_name: full_name,
           transaction_amount: amount,
           transaction_description: description,
-          transaction_type: type
+          transaction_type: type,
         },
         { transaction },
       );
@@ -89,13 +83,13 @@ export class TransactionsService {
     }
   }
 
-   async getSenderCard() {
+  async getCurrentCard() {
     const sender = await this.authService.getUserInfoFromToken();
     const senderCard = await this.cardService.getCardById(sender.id);
     return senderCard;
   }
 
-   async getReceiverCard(dto: createTransactionDto) {
+  async getReceiverCard(dto: createTransactionDto) {
     const receiverCard = await this.cardService.getCardByNumber(
       dto.receiver_card_number,
     );
@@ -114,26 +108,24 @@ export class TransactionsService {
       );
     }
 
-  
     return receiverCard;
   }
 
-  async getAllTransactions() {
-    const userCard = await this.getSenderCard();
+  async getUsersTransactions() {
+    const userCard = await this.getCurrentCard();
     const transactions = await this.transactionModel.findAll({
       where: {
         [Op.or]: [
           { sender_card_id: userCard.card_id },
-          { receiver_card_id: userCard.card_id }
-        ]
-      }
+          { receiver_card_id: userCard.card_id },
+        ],
+      },
     });
     return transactions;
-
   }
 
   async simulateDeposit(dto: createTransactionDto) {
-    const currCard = await this.getSenderCard();
+    const currCard = await this.getCurrentCard();
     const amount = dto.transaction_amount;
 
     if (amount > 50000) {
@@ -147,33 +139,37 @@ export class TransactionsService {
         { card_balance: currCard.card_balance + amount },
         { where: { card_id: currCard.card_id } },
       );
-      
-    }else  throw new HttpException('Догралися! - картку заблоковано!)', HttpStatus.OK);
-  
+    } else
+      throw new HttpException(
+        'Догралися! - картку заблоковано!)',
+        HttpStatus.OK,
+      );
 
     if (currCard.card_balance < 200000) {
-       const createdTransaction = await this.transactionModel.create({
-         sender_card_id: currCard.card_id,
-         receiver_card_id: currCard.card_id,
-         receiver_card_number: currCard.card_number,
-         receiver_full_name: 'GIFT 🎁',
-         transaction_amount: amount,
-         transaction_description: 'Симуляція поповнення рахунку',
-         transaction_type: 'DEPOSIT',
-       });
-       return createdTransaction;
+      const createdTransaction = await this.transactionModel.create({
+        sender_card_id: currCard.card_id,
+        receiver_card_id: currCard.card_id,
+        receiver_card_number: currCard.card_number,
+        receiver_full_name: 'GIFT 🎁',
+        transaction_amount: amount,
+        transaction_description: 'Симуляція поповнення рахунку',
+        transaction_type: 'DEPOSIT',
+      });
+      return createdTransaction;
     } else {
       await this.cardRepository.update(
-        { blocked: true, blockReason: "Overdrafting" },
-        { where: { card_id: currCard.card_id } }
+        { blocked: true, blockReason: 'Overdrafting' },
+        { where: { card_id: currCard.card_id } },
       );
-      throw new HttpException('Догралися! - картку заблоковано!)', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'Догралися! - картку заблоковано!)',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
-      
   }
 
   async simulateWithdrawal(dto: createTransactionDto) {
-    const currCard = await this.getSenderCard();
+    const currCard = await this.getCurrentCard();
     const amount = dto.transaction_amount;
 
     await this.cardRepository.update(
@@ -194,8 +190,13 @@ export class TransactionsService {
       receiver_full_name: 'Expension 💵',
       transaction_amount: amount,
       transaction_description: 'Симуляція витрат',
-      transaction_type: 'EXPENSE'
+      transaction_type: 'EXPENSE',
     });
     return createdTransaction;
+  }
+
+  async getAllTransactions() {
+    const transactions = await this.transactionModel.findAll();
+    return transactions;
   }
 }

@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Card, generateCVV, generateUniqueCardNumber } from './card.model';
 import { User } from '../users/user.model';
+// import { TransactionsService } from 'src/transactions/transactions.service';
+// import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class CardsService {
   constructor(
     @InjectModel(Card) private cardModel: typeof Card,
     @InjectModel(User) private userModel: typeof User,
+  
+    
   ) {}
 
   async getCardById(card_id: number) {
@@ -43,18 +47,15 @@ export class CardsService {
 
   async getCardsByUserId(user_id: number) {
     const card = await this.cardModel.findOne({ where: { user_id } });
-    if (!card) {
-      // handle error - user not found
-    }
 
     return card;
   }
+
   async getCardByNumber(card_number: string) {
     const card = await this.cardModel.findOne({ where:{ card_number } });
-    if (!card) {
-      // handle error - user not found
-    }
-
+   
     return card;
   }
+
+  
 }

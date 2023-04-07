@@ -13,6 +13,10 @@ const auth_controller_1 = require("./auth.controller");
 const users_module_1 = require("../users/users.module");
 const jwt_1 = require("@nestjs/jwt");
 const cards_module_1 = require("../cards/cards.module");
+const cards_service_1 = require("../cards/cards.service");
+const transactions_module_1 = require("../transactions/transactions.module");
+const transactions_service_1 = require("../transactions/transactions.service");
+const users_service_1 = require("../users/users.service");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
@@ -22,6 +26,7 @@ AuthModule = __decorate([
         imports: [
             (0, common_1.forwardRef)(() => users_module_1.UsersModule),
             (0, common_1.forwardRef)(() => cards_module_1.CardsModule),
+            (0, common_1.forwardRef)(() => transactions_module_1.TransactionsModule),
             jwt_1.JwtModule.register({
                 secret: process.env.PRIVATE_KEY || 'SECRET',
                 signOptions: {

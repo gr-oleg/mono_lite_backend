@@ -14,7 +14,6 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(
     private usersService: UsersService,
-    readonly cardService: CardsService,
   ) {}
 // Create or get users
   @ApiOperation({ summary: 'Create User and Card' })
@@ -40,15 +39,5 @@ export class UsersController {
     const user = await this.usersService.getUserById(user_id);
     return user;
   }
-  // //////////////////////////
-
-  
-
-//   // Authorize and Validate Users
-//   @Post('/login')
-//   async loginUser(@Body() dto:LogInUserDto) {
-//     const user = await this.usersService.getUserbyEmail(dto)
-//     return user
-//   }
 }
 
