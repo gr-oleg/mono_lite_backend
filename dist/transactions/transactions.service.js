@@ -46,7 +46,7 @@ let TransactionsService = class TransactionsService {
         const transaction = await this.transactionModel.sequelize.transaction();
         try {
             await this.cardRepository.update({ card_balance: senderCard.card_balance - amount }, { where: { card_id: senderCard.card_id }, transaction });
-            await this.cardRepository.update({ card_balance: receiverCard.card_balance + amount }, { where: { card_id: receiverCard.card_id }, transaction });
+            await this.cardRepository.update({ card_balance: +receiverCard.card_balance + +amount }, { where: { card_id: receiverCard.card_id }, transaction });
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: senderCard.card_id,
                 receiver_card_id: receiverCard.card_id,
@@ -98,7 +98,7 @@ let TransactionsService = class TransactionsService {
             throw new common_1.HttpException('Нічого не злипнеться?!🍑', common_1.HttpStatus.BAD_REQUEST);
         }
         if (!currCard.blocked) {
-            await this.cardRepository.update({ card_balance: currCard.card_balance + amount }, { where: { card_id: currCard.card_id } });
+            await this.cardRepository.update({ card_balance: +currCard.card_balance + +amount }, { where: { card_id: currCard.card_id } });
         }
         else
             throw new common_1.HttpException('Догралися! - картку заблоковано!)', common_1.HttpStatus.OK);

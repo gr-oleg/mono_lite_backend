@@ -32,7 +32,7 @@ export class CashbackService {
          const sortedTransactions = await this.transactionModel.findAll({where:{sender_card_id: currCard.card_id, transaction_type: "EXPENSE"}})
         const cashBack = sortedTransactions.forEach(async transaction => {
             if (transaction.transaction_type == "EXPENSE") {
-                const percentageAmount = transaction.transaction_amount * 0.02;
+                const percentageAmount = +transaction.transaction_amount * 0.02;
               await this.cashbackModel.update({ cashback_balance: currCard.cashback_balance + percentageAmount },
                   { where: { card_id: currCard.card_id } })
             }
@@ -50,8 +50,8 @@ export class CashbackService {
 
         if (currStorage.cashback_balance >= 100 && currStorage.cashback_balance >= amount) {
             await this.cardModel.update(
-                { card_balance: currCard.card_balance + amount * 0.15 },
-                { where: { card_id: currCard.card_id } }
+              { card_balance: +currCard.card_balance + +amount * 0.15 },
+              { where: { card_id: currCard.card_id } },
             );
 
             const transaction = await this.transactionModel.create({

@@ -136,7 +136,7 @@ export async function generateUniqueCardNumber(): Promise<string> {
 
 function generateRandomCardNumber(): string {
   const BIN = '5375'; // Bank Identification Number
-  const randomNumber = Math.floor(Math.random() * 99999999999999); // 14-digit random number
+  const randomNumber = Math.floor(Math.random() * 999999999999); // 14-digit random number
   const cardNumber =
     BIN + randomNumber.toString().padStart(14 - BIN.length, '0'); // 16-digit card number
   return cardNumber;

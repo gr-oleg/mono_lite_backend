@@ -54,7 +54,7 @@ export class TransactionsService {
       );
 
       await this.cardRepository.update(
-        { card_balance: receiverCard.card_balance + amount },
+        { card_balance: +receiverCard.card_balance + +amount },
         { where: { card_id: receiverCard.card_id }, transaction },
       );
 
@@ -136,7 +136,7 @@ export class TransactionsService {
     }
     if (!currCard.blocked) {
       await this.cardRepository.update(
-        { card_balance: currCard.card_balance + amount },
+        { card_balance: +currCard.card_balance + +amount },
         { where: { card_id: currCard.card_id } },
       );
     } else

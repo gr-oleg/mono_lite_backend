@@ -37,7 +37,7 @@ let AuthService = class AuthService {
     async signUp(userDto) {
         const candidate = await this.userService.getUserbyEmail(userDto.email);
         if (candidate) {
-            throw new common_1.HttpException('Зайнято! -- Здається користувач з таким емейлом уже існує ', common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException('Зайнято! -- Користувач з таким емейлом уже існує ', common_1.HttpStatus.BAD_REQUEST);
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         const user = await this.userService.createUser(Object.assign(Object.assign({}, userDto), { password: hashPassword }));
@@ -60,14 +60,14 @@ let AuthService = class AuthService {
     async validateUser(userDto) {
         const user = await this.userService.getUserbyEmail(userDto.email);
         if (!user) {
-            throw new common_1.HttpException('Як нема?! А де сі діло ?! -- Здається користувача з таким емейлом не існує', common_1.HttpStatus.NOT_FOUND);
+            throw new common_1.HttpException('Як нема?! А де сі діло ?! -- Користувача з таким емейлом не існує', common_1.HttpStatus.NOT_FOUND);
         }
         const passwordEquals = await bcrypt.compare(userDto.password, user.password);
         if (user && passwordEquals) {
             return user;
         }
         if (!passwordEquals) {
-            throw new common_1.HttpException('Йой.. Але то вже безголове -- Пароль не вірний:(', common_1.HttpStatus.UNAUTHORIZED);
+            throw new common_1.HttpException('Йой.. А голову ти дома не забув(ла) -- Пароль не вірний:(', common_1.HttpStatus.UNAUTHORIZED);
         }
     }
 };

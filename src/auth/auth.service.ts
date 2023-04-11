@@ -34,7 +34,7 @@ export class AuthService {
 
     if (candidate) {
       throw new HttpException(
-        'Зайнято! -- Здається користувач з таким емейлом уже існує ',
+        'Зайнято! -- Користувач з таким емейлом уже існує ',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -67,7 +67,7 @@ export class AuthService {
 
     if (!user) {
       throw new HttpException(
-        'Як нема?! А де сі діло ?! -- Здається користувача з таким емейлом не існує',
+        'Як нема?! А де сі діло ?! -- Користувача з таким емейлом не існує',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -82,7 +82,7 @@ export class AuthService {
 
     if (!passwordEquals) {
       throw new HttpException(
-        'Йой.. Але то вже безголове -- Пароль не вірний:(',
+        'Йой.. А голову ти дома не забув(ла) -- Пароль не вірний:(',
         HttpStatus.UNAUTHORIZED,
       );
     }

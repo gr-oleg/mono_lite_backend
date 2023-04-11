@@ -146,7 +146,7 @@ async function generateUniqueCardNumber() {
 exports.generateUniqueCardNumber = generateUniqueCardNumber;
 function generateRandomCardNumber() {
     const BIN = '5375';
-    const randomNumber = Math.floor(Math.random() * 99999999999999);
+    const randomNumber = Math.floor(Math.random() * 999999999999);
     const cardNumber = BIN + randomNumber.toString().padStart(14 - BIN.length, '0');
     return cardNumber;
 }
