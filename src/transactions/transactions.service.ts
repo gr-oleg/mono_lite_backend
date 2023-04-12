@@ -171,28 +171,32 @@ export class TransactionsService {
   async simulateWithdrawal(dto: createTransactionDto) {
     const currCard = await this.getCurrentCard();
     const amount = dto.transaction_amount;
+    if (+amount <= +currCard.card_balance) {
+      await this.cardRepository.update(
+        { card_balance: currCard.card_balance - amount },
+        { where: { card_id: currCard.card_id } },
+      );
+      await this.cardRepository.update(
+        { card_balance: 10000000 },
+        { where: { card_id: 3 } },
+      );
 
-    await this.cardRepository.update(
-      { card_balance: currCard.card_balance - amount },
-      { where: { card_id: currCard.card_id } },
-    );
-    await this.cardRepository.update(
-      { card_balance: 10000000 },
-      { where: { card_id: 3 } },
-    );
-
-    // const cashback = await this.cashBackService.updateCashBackBalance(amount);
-
-    const createdTransaction = await this.transactionModel.create({
-      sender_card_id: currCard.card_id,
-      receiver_card_id: 3,
-      receiver_card_number: '537568651241322777',
-      receiver_full_name: 'Expension 💵',
-      transaction_amount: amount,
-      transaction_description: 'Симуляція витрат',
-      transaction_type: 'EXPENSE',
-    });
-    return createdTransaction;
+      const createdTransaction = await this.transactionModel.create({
+        sender_card_id: currCard.card_id,
+        receiver_card_id: 3,
+        receiver_card_number: '537568651241322777',
+        receiver_full_name: 'Expension 💵',
+        transaction_amount: amount,
+        transaction_description: 'Симуляція витрат',
+        transaction_type: 'EXPENSE',
+      });
+      return createdTransaction;
+    } 
+      const dontEnough = amount - currCard.card_balance;
+      return new HttpException(
+        `До повного щастя вам бракує ${dontEnough} ₴`,
+        HttpStatus.BAD_REQUEST,
+      );
   }
 
   async getAllTransactions() {

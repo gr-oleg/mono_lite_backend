@@ -33,11 +33,11 @@ export class CashbackService {
         const cashBack = sortedTransactions.forEach(async transaction => {
             if (transaction.transaction_type == "EXPENSE") {
                 const percentageAmount = +transaction.transaction_amount * 0.02;
-              await this.cashbackModel.update({ cashback_balance: currCard.cashback_balance + percentageAmount },
+              await this.cashbackModel.update({ cashback_balance: percentageAmount },
                   { where: { card_id: currCard.card_id } })
             }
-            return cashBack;
         })
+        return cashBack;
    
     }
 

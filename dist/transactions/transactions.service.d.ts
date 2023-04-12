@@ -1,4 +1,5 @@
 import { Card } from 'src/cards/card.model';
+import { HttpException } from '@nestjs/common';
 import { Transaction } from './transactions.model';
 import { createTransactionDto } from './dto/create-transaction.dto';
 import { AuthService } from 'src/auth/auth.service';
@@ -14,6 +15,6 @@ export declare class TransactionsService {
     getReceiverCard(dto: createTransactionDto): Promise<Card>;
     getUsersTransactions(): Promise<Transaction[]>;
     simulateDeposit(dto: createTransactionDto): Promise<Transaction>;
-    simulateWithdrawal(dto: createTransactionDto): Promise<Transaction>;
+    simulateWithdrawal(dto: createTransactionDto): Promise<Transaction | HttpException>;
     getAllTransactions(): Promise<Transaction[]>;
 }
