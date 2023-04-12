@@ -31,4 +31,7 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+Decomposition in progres..😅
+
 Link to frontend: https://github.com/Xavtso/mono-lite-front
+Or current deployed version: https://proud-river-08d562003.2.azurestaticapps.net/
