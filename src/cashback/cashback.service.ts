@@ -27,19 +27,7 @@ export class CashbackService {
         return currCard;
     }
 
-    async updateCashBackBalance() {
-        const currCard = await this.createCashBackStorage();
-         const sortedTransactions = await this.transactionModel.findAll({where:{sender_card_id: currCard.card_id, transaction_type: "EXPENSE"}})
-        const cashBack = sortedTransactions.forEach(async transaction => {
-            if (transaction.transaction_type == "EXPENSE") {
-                const percentageAmount = +transaction.transaction_amount * 0.02;
-              await this.cashbackModel.update({ cashback_balance: percentageAmount },
-                  { where: { card_id: currCard.card_id } })
-            }
-        })
-        return cashBack;
-   
-    }
+    
 
     async getCashBackToBalance(dto: CashBackDto) {
         const amount = dto.amount;
@@ -59,7 +47,7 @@ export class CashbackService {
               receiver_card_id: currCard.card_id,
               receiver_card_number: currCard.card_number,
               receiver_full_name: currCard.owner_name + ' ' + currCard.owner_surname,
-              transaction_amount: amount * 0.15,
+              transaction_amount: +amount * 0.15,
               transaction_description: 'Кешбек🎉💵',
               transaction_type: 'CASH-BACK',
             });
@@ -72,7 +60,7 @@ export class CashbackService {
     }
 
     async showBalance() {
-        await this.updateCashBackBalance();
+        // await this.updateCashBackBalance();
         const currCard = await this.transactionService.getCurrentCard();
         const currStorage = await this.cashbackModel.findOne({
           where: { card_id: currCard.card_id },

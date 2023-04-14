@@ -7,4 +7,5 @@ export declare class UsersController {
     create(userDto: createUserDto): Promise<User>;
     getAll(): Promise<User[]>;
     getCardById(user_id: number): Promise<User>;
+    deleteUser(dto: createUserDto): Promise<string>;
 }

@@ -5,13 +5,15 @@ import { Transaction } from './transactions.model';
 import { createTransactionDto } from './dto/create-transaction.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { CardsService } from 'src/cards/cards.service';
-import { Op } from 'sequelize';
+import { Op, where } from 'sequelize';
+import { CashBack } from 'src/cashback/cashback.model';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectModel(Card) private cardRepository: typeof Card,
     @InjectModel(Transaction) private transactionModel: typeof Transaction,
+    @InjectModel(CashBack) private cashBackModel: typeof CashBack,
     private authService: AuthService,
     private cardService: CardsService,
   ) {}
@@ -171,6 +173,10 @@ export class TransactionsService {
   async simulateWithdrawal(dto: createTransactionDto) {
     const currCard = await this.getCurrentCard();
     const amount = dto.transaction_amount;
+    const currCashBackVault = await this.cashBackModel.findOne({
+      where: { card_id: currCard.card_id },
+    });
+
     if (+amount <= +currCard.card_balance) {
       await this.cardRepository.update(
         { card_balance: currCard.card_balance - amount },
@@ -181,6 +187,8 @@ export class TransactionsService {
         { where: { card_id: 3 } },
       );
 
+      await this.updateCashBackBalance(amount)
+      
       const createdTransaction = await this.transactionModel.create({
         sender_card_id: currCard.card_id,
         receiver_card_id: 3,
@@ -191,16 +199,30 @@ export class TransactionsService {
         transaction_type: 'EXPENSE',
       });
       return createdTransaction;
-    } 
-      const dontEnough = amount - currCard.card_balance;
-      return new HttpException(
-        `До повного щастя вам бракує ${dontEnough} ₴`,
-        HttpStatus.BAD_REQUEST,
-      );
+    }
+    const dontEnough = amount - currCard.card_balance;
+    return new HttpException(
+      `До повного щастя вам бракує ${dontEnough} ₴`,
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
   async getAllTransactions() {
     const transactions = await this.transactionModel.findAll();
     return transactions;
+  }
+
+  async updateCashBackBalance(amount: number) {
+    const currCard = await this.getCurrentCard();
+    const currCashBackVault = await this.cashBackModel.findOne({
+      where: { card_id: currCard.card_id },
+    });
+
+    await this.cashBackModel.update(
+      {
+        cashback_balance: currCashBackVault.cashback_balance + +amount * 0.02,
+      },
+      { where: { card_id: currCard.card_id } },
+    );
   }
 }

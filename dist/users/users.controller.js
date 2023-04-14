@@ -36,6 +36,9 @@ let UsersController = class UsersController {
         const user = await this.usersService.getUserById(user_id);
         return user;
     }
+    async deleteUser(dto) {
+        return await this.usersService.deleteUser(dto);
+    }
 };
 __decorate([
     (0, dist_1.ApiOperation)({ summary: 'Create User and Card' }),
@@ -63,6 +66,13 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getCardById", null);
+__decorate([
+    (0, common_1.Post)('/delete'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_user_dto_1.createUserDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "deleteUser", null);
 UsersController = __decorate([
     (0, api_use_tags_decorator_1.ApiTags)('Users'),
     (0, common_1.Controller)('users'),

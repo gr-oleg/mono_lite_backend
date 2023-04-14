@@ -39,5 +39,10 @@ export class UsersController {
     const user = await this.usersService.getUserById(user_id);
     return user;
   }
+
+  @Post('/delete')
+  async deleteUser(@Body() dto: createUserDto) {
+    return  await this.usersService.deleteUser(dto);
+  }
 }
 

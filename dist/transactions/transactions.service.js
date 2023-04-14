@@ -20,10 +20,12 @@ const transactions_model_1 = require("./transactions.model");
 const auth_service_1 = require("../auth/auth.service");
 const cards_service_1 = require("../cards/cards.service");
 const sequelize_2 = require("sequelize");
+const cashback_model_1 = require("../cashback/cashback.model");
 let TransactionsService = class TransactionsService {
-    constructor(cardRepository, transactionModel, authService, cardService) {
+    constructor(cardRepository, transactionModel, cashBackModel, authService, cardService) {
         this.cardRepository = cardRepository;
         this.transactionModel = transactionModel;
+        this.cashBackModel = cashBackModel;
         this.authService = authService;
         this.cardService = cardService;
     }
@@ -122,9 +124,13 @@ let TransactionsService = class TransactionsService {
     async simulateWithdrawal(dto) {
         const currCard = await this.getCurrentCard();
         const amount = dto.transaction_amount;
+        const currCashBackVault = await this.cashBackModel.findOne({
+            where: { card_id: currCard.card_id },
+        });
         if (+amount <= +currCard.card_balance) {
             await this.cardRepository.update({ card_balance: currCard.card_balance - amount }, { where: { card_id: currCard.card_id } });
             await this.cardRepository.update({ card_balance: 10000000 }, { where: { card_id: 3 } });
+            await this.updateCashBackBalance(amount);
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: currCard.card_id,
                 receiver_card_id: 3,
@@ -143,12 +149,22 @@ let TransactionsService = class TransactionsService {
         const transactions = await this.transactionModel.findAll();
         return transactions;
     }
+    async updateCashBackBalance(amount) {
+        const currCard = await this.getCurrentCard();
+        const currCashBackVault = await this.cashBackModel.findOne({
+            where: { card_id: currCard.card_id },
+        });
+        await this.cashBackModel.update({
+            cashback_balance: currCashBackVault.cashback_balance + +amount * 0.02,
+        }, { where: { card_id: currCard.card_id } });
+    }
 };
 TransactionsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(card_model_1.Card)),
     __param(1, (0, sequelize_1.InjectModel)(transactions_model_1.Transaction)),
-    __metadata("design:paramtypes", [Object, Object, auth_service_1.AuthService,
+    __param(2, (0, sequelize_1.InjectModel)(cashback_model_1.CashBack)),
+    __metadata("design:paramtypes", [Object, Object, Object, auth_service_1.AuthService,
         cards_service_1.CardsService])
 ], TransactionsService);
 exports.TransactionsService = TransactionsService;

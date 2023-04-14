@@ -16,6 +16,8 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const user_model_1 = require("./user.model");
+const bcrypt = require("bcryptjs");
+const card_model_1 = require("../cards/card.model");
 let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -38,6 +40,29 @@ let UsersService = class UsersService {
             include: { all: true }
         });
         return user;
+    }
+    async deleteUser(dto) {
+        const user = await this.userRepository.findOne({ where: { email: dto.email } });
+        if (!user) {
+            throw new common_1.HttpException('Пароль або емейл не вірні', common_1.HttpStatus.BAD_REQUEST);
+        }
+        const isValidPassword = await bcrypt.compare(dto.password, user.password);
+        console.log(dto.password);
+        console.log(isValidPassword);
+        if (isValidPassword) {
+            console.log('password is valid');
+            try {
+                const cardDelete = await card_model_1.Card.destroy({ where: { user_id: user.user_id } });
+                const result = await user_model_1.User.destroy({ where: { email: user.email } });
+                if (result === 0 || cardDelete === 0) {
+                    throw new Error('Користувач не знайдений');
+                }
+                return 'Користувач успішно видалений';
+            }
+            catch (error) {
+                throw new Error(`Помилка при видаленні користувача: ${error.message}`);
+            }
+        }
     }
 };
 UsersService = __decorate([
