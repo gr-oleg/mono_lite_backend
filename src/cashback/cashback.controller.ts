@@ -1,4 +1,4 @@
-import { Controller,Post,Get } from '@nestjs/common';
+import { Controller,Post,Get ,Body} from '@nestjs/common';
 import { CashBackDto } from './dto/cashBack.dto';
 import { CashbackService } from './cashback.service';
 
@@ -8,7 +8,7 @@ export class CashbackController {
     constructor(private cashbackService: CashbackService){}
 
     @Post()
-    getCashBack(dto: CashBackDto) {
+    getCashBack(@Body() dto: CashBackDto) {
         return this.cashbackService.getCashBackToBalance(dto);
     }
     @Get('/balance')
