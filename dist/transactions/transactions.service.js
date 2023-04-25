@@ -124,12 +124,8 @@ let TransactionsService = class TransactionsService {
     async simulateWithdrawal(dto) {
         const currCard = await this.getCurrentCard();
         const amount = dto.transaction_amount;
-        const currCashBackVault = await this.cashBackModel.findOne({
-            where: { card_id: currCard.card_id },
-        });
         if (+amount <= +currCard.card_balance) {
             await this.cardRepository.update({ card_balance: currCard.card_balance - amount }, { where: { card_id: currCard.card_id } });
-            await this.cardRepository.update({ card_balance: 10000000 }, { where: { card_id: 3 } });
             await this.updateCashBackBalance(amount);
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: currCard.card_id,

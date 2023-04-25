@@ -17,7 +17,7 @@ export declare class TransactionsService {
     getReceiverCard(dto: createTransactionDto): Promise<Card>;
     getUsersTransactions(): Promise<Transaction[]>;
     simulateDeposit(dto: createTransactionDto): Promise<Transaction>;
-    simulateWithdrawal(dto: createTransactionDto): Promise<HttpException | Transaction>;
+    simulateWithdrawal(dto: createTransactionDto): Promise<Transaction | HttpException>;
     getAllTransactions(): Promise<Transaction[]>;
     updateCashBackBalance(amount: number): Promise<void>;
 }
