@@ -12,10 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
-const create_user_dto_1 = require("../users/dto/create-user.dto");
 const users_service_1 = require("../users/users.service");
 const bcrypt = require("bcryptjs");
-const user_model_1 = require("../users/user.model");
 const cards_service_1 = require("../cards/cards.service");
 let AuthService = class AuthService {
     constructor(userService, jwtService, cardService) {
