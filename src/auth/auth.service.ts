@@ -1,4 +1,4 @@
-import { Injectable,HttpException,HttpCode,HttpStatus } from '@nestjs/common';
+import { Injectable,HttpException,HttpCode,HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { createUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
@@ -15,6 +15,8 @@ export class AuthService {
   ) {}
 
   private curToken: Promise<{ token: string }>;
+
+    
 
   async getUserInfoFromToken() {
     const decodedToken = await this.jwtService.verifyAsync(
@@ -66,9 +68,8 @@ export class AuthService {
     const user = await this.userService.getUserbyEmail(userDto.email);
 
     if (!user) {
-      throw new HttpException(
+      throw new UnauthorizedException(
         'Як нема?! А де сі діло ?! -- Користувача з таким емейлом не існує',
-        HttpStatus.NOT_FOUND,
       );
     }
     const passwordEquals = await bcrypt.compare(
@@ -81,9 +82,8 @@ export class AuthService {
     }
 
     if (!passwordEquals) {
-      throw new HttpException(
-        'Йой.. А голову ти дома не забув(ла) -- Пароль не вірний:(',
-        HttpStatus.UNAUTHORIZED,
+      throw new UnauthorizedException(
+        'Йой.. А голову ти дома не забув(ла) -- Пароль не вірний:('
       );
     }
   }

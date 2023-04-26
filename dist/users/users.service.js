@@ -47,20 +47,17 @@ let UsersService = class UsersService {
             throw new common_1.HttpException('Пароль або емейл не вірні', common_1.HttpStatus.BAD_REQUEST);
         }
         const isValidPassword = await bcrypt.compare(dto.password, user.password);
-        console.log(dto.password);
-        console.log(isValidPassword);
         if (isValidPassword) {
-            console.log('password is valid');
             try {
                 const cardDelete = await card_model_1.Card.destroy({ where: { user_id: user.user_id } });
                 const result = await user_model_1.User.destroy({ where: { email: user.email } });
                 if (result === 0 || cardDelete === 0) {
-                    throw new Error('Користувач не знайдений');
+                    throw new common_1.ConflictException('Користувач не знайдений');
                 }
                 return 'Користувач успішно видалений';
             }
             catch (error) {
-                throw new Error(`Помилка при видаленні користувача: ${error.message}`);
+                throw new common_1.ConflictException(`Помилка при видаленні користувача: ${error.message}`);
             }
         }
     }

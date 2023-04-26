@@ -16,7 +16,11 @@ const card_model_1 = require("../cards/card.model");
 const cards_module_1 = require("../cards/cards.module");
 const auth_module_1 = require("../auth/auth.module");
 const cashback_module_1 = require("../cashback/cashback.module");
+const cashback_service_1 = require("../cashback/cashback.service");
 const cashback_model_1 = require("../cashback/cashback.model");
+const cards_service_1 = require("../cards/cards.service");
+const auth_service_1 = require("../auth/auth.service");
+const users_service_1 = require("../users/users.service");
 const user_model_1 = require("../users/user.model");
 let TransactionsModule = class TransactionsModule {
 };

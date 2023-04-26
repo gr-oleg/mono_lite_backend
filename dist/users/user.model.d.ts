@@ -5,6 +5,7 @@ interface UserCreationsAttrs {
     second_name: string;
     email: string;
     password: string;
+    imageURL: string;
 }
 export declare class User extends Model<User, UserCreationsAttrs> {
     user_id: number;
@@ -13,6 +14,7 @@ export declare class User extends Model<User, UserCreationsAttrs> {
     first_name: string;
     second_name: string;
     card_number: string;
+    imageURL: string;
     cards: Card[];
     static user_id: number;
 }

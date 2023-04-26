@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CashBack } from './cashback.model';
 import { TransactionsService } from 'src/transactions/transactions.service';
@@ -15,20 +15,7 @@ export class CashbackService {
     private transactionService: TransactionsService,
   ) {}
 
-  async createCashBackStorage() {
-    const card = await this.transactionService.getCurrentCard();
-    const currCard = await this.cashbackModel.findOne({
-      where: { card_id: card.card_id },
-    });
-    if (!currCard) {
-      const currCard = await this.cashbackModel.create({
-        card_id: card.card_id,
-        cashback_balance: 0,
-      });
-      return currCard;
-    }
-    return currCard;
-  }
+ 
 
   async getCashBackToBalance(dto: CashBackDto) {
     const amount = dto.amount;
@@ -64,10 +51,7 @@ export class CashbackService {
 
       return transaction;
     } else if (currStorage.cashback_balance < amount) {
-      throw new HttpException(
-        'Ти кого хочеш намахати?',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new ConflictException('Ти кого хочеш намахати?');
     }
   }
 

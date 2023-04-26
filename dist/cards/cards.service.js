@@ -29,7 +29,7 @@ let CardsService = class CardsService {
     async createCard(user_id) {
         const user = await this.userModel.findByPk(user_id);
         if (!user) {
-            throw Error('This User does not exist');
+            throw new common_1.ConflictException('This User does not exist');
         }
         const cardNumber = await (0, card_model_1.generateUniqueCardNumber)();
         const codeCVV = await (0, card_model_1.generateCVV)();

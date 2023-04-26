@@ -1,5 +1,5 @@
 import { Card } from 'src/cards/card.model';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Transaction } from './transactions.model';
 import { createTransactionDto } from './dto/create-transaction.dto';
@@ -23,11 +23,11 @@ export class TransactionsService {
     const receiverCard = await this.getReceiverCard(dto);
 
     if (senderCard.blocked) {
-      throw new Error('Ви наказані!) - картку заблоковано!)');
+      throw new ConflictException('Ви наказані!) - картку заблоковано!)');
     }
 
     if (receiverCard.card_number === senderCard.card_number) {
-      throw new Error('Ти шо,самий мудрий ?!');
+      throw new ConflictException('Ти шо,самий мудрий ?!');
     }
     const sender_full_name =
       senderCard.owner_name + ' ' + senderCard.owner_surname;
@@ -37,7 +37,7 @@ export class TransactionsService {
     const amount = dto.transaction_amount;
 
     if (amount > senderCard.card_balance) {
-      throw new Error('Йди на роботу! -- Недостатньо коштів 💵');
+      throw new ConflictException('Йди на роботу! -- Недостатньо коштів 💵');
     }
 
     const description = dto.transaction_description;
@@ -100,7 +100,7 @@ export class TransactionsService {
     }
 
     if (receiverCard.blocked) {
-      throw new Error(
+      throw new ConflictException(
         'Стоїть в кутку - наказаний(а)! -- Цю карту заблоковано!',
       );
     }
@@ -127,14 +127,14 @@ export class TransactionsService {
     const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
 
     if (amount > 50000) {
-      throw new Error('Нічого не злипнеться?!🍑');
+      throw new ConflictException('Нічого не злипнеться?!🍑');
     }
     if (!currCard.blocked) {
       await this.cardRepository.update(
         { card_balance: +currCard.card_balance + +amount },
         { where: { card_id: currCard.card_id } },
       );
-    } else throw new Error('Догралися! - картку заблоковано!)');
+    } else throw new ConflictException('Догралися! - картку заблоковано!)');
 
     if (currCard.card_balance < 200000) {
       const createdTransaction = await this.transactionModel.create({
@@ -153,7 +153,7 @@ export class TransactionsService {
         { blocked: true, blockReason: 'Overdrafting' },
         { where: { card_id: currCard.card_id } },
       );
-      throw new Error('Догралися! - картку заблоковано!)');
+      throw new ConflictException('Догралися! - картку заблоковано!)');
     }
   }
 
@@ -183,7 +183,7 @@ export class TransactionsService {
       return createdTransaction;
     }
     const dontEnough = amount - currCard.card_balance;
-    return new Error(`До повного щастя вам бракує ${dontEnough} ₴`);
+    throw new ConflictException(`До повного щастя вам бракує ${dontEnough} ₴`);
   }
 
   async getAllTransactions() {

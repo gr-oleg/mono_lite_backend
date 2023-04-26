@@ -12,8 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
+const create_user_dto_1 = require("../users/dto/create-user.dto");
 const users_service_1 = require("../users/users.service");
 const bcrypt = require("bcryptjs");
+const user_model_1 = require("../users/user.model");
 const cards_service_1 = require("../cards/cards.service");
 let AuthService = class AuthService {
     constructor(userService, jwtService, cardService) {
@@ -58,14 +60,14 @@ let AuthService = class AuthService {
     async validateUser(userDto) {
         const user = await this.userService.getUserbyEmail(userDto.email);
         if (!user) {
-            throw new common_1.HttpException('Як нема?! А де сі діло ?! -- Користувача з таким емейлом не існує', common_1.HttpStatus.NOT_FOUND);
+            throw new common_1.UnauthorizedException('Як нема?! А де сі діло ?! -- Користувача з таким емейлом не існує');
         }
         const passwordEquals = await bcrypt.compare(userDto.password, user.password);
         if (user && passwordEquals) {
             return user;
         }
         if (!passwordEquals) {
-            throw new common_1.HttpException('Йой.. А голову ти дома не забув(ла) -- Пароль не вірний:(', common_1.HttpStatus.UNAUTHORIZED);
+            throw new common_1.UnauthorizedException('Йой.. А голову ти дома не забув(ла) -- Пароль не вірний:(');
         }
     }
 };

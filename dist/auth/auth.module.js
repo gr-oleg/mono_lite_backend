@@ -13,7 +13,10 @@ const auth_controller_1 = require("./auth.controller");
 const users_module_1 = require("../users/users.module");
 const jwt_1 = require("@nestjs/jwt");
 const cards_module_1 = require("../cards/cards.module");
+const cards_service_1 = require("../cards/cards.service");
 const transactions_module_1 = require("../transactions/transactions.module");
+const transactions_service_1 = require("../transactions/transactions.service");
+const users_service_1 = require("../users/users.service");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([

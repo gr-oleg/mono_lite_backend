@@ -67,6 +67,14 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "card_number", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.STRING,
+        allowNull: true,
+        defaultValue: '',
+    }),
+    __metadata("design:type", String)
+], User.prototype, "imageURL", void 0);
+__decorate([
     (0, sequelize_typescript_1.HasMany)(() => card_model_1.Card, 'user_id'),
     __metadata("design:type", Array)
 ], User.prototype, "cards", void 0);

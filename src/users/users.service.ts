@@ -1,4 +1,4 @@
-import { Injectable,HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable,HttpException, HttpStatus, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { createUserDto } from './dto/create-user.dto';
@@ -41,19 +41,16 @@ export class UsersService {
     }
 
     const isValidPassword = await bcrypt.compare(dto.password, user.password);
-    console.log(dto.password);
-    console.log(isValidPassword);
     if (isValidPassword) {
-      console.log('password is valid');
       try {
         const cardDelete = await Card.destroy({where: {user_id: user.user_id}}) ;
         const result = await User.destroy({ where: { email: user.email } });
         if (result === 0 || cardDelete === 0) {
-          throw new Error('Користувач не знайдений');
+          throw new ConflictException('Користувач не знайдений');
         }
         return 'Користувач успішно видалений';
       } catch (error) {
-        throw new Error(`Помилка при видаленні користувача: ${error.message}`);
+        throw new ConflictException(`Помилка при видаленні користувача: ${error.message}`);
         
       }
     }

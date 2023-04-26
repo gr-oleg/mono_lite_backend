@@ -1,10 +1,7 @@
-import { Controller, Post,Get, Body, Param, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post,Get, Body, Param} from '@nestjs/common';
 import { ApiResponse,ApiOperation } from '@nestjs/swagger/dist';
 import { ApiTags } from '@nestjs/swagger/dist/decorators/api-use-tags.decorator';
-import { Card } from 'src/cards/card.model';
-import { CardsService } from 'src/cards/cards.service';
 import { createUserDto } from './dto/create-user.dto';
-import { LogInUserDto } from './dto/logIn-user.dto';
 import { User } from './user.model';
 import { UsersService } from './users.service';
 

@@ -8,7 +8,7 @@ interface UserCreationsAttrs{
     second_name: string,
     email: string
     password: string,
-
+    imageURL: string
 }
 
 
@@ -60,6 +60,13 @@ export class User extends Model<User, UserCreationsAttrs> {
     allowNull: true,
   })
   card_number: string;
+  
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+    defaultValue: '',
+  })
+  imageURL: string;
 
   
   @HasMany(() => Card, 'user_id')

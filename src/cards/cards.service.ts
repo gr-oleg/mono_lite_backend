@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Card, generateCVV, generateUniqueCardNumber } from './card.model';
 import { User } from '../users/user.model';
@@ -21,7 +21,7 @@ export class CardsService {
   async createCard(user_id: number) {
     const user = await this.userModel.findByPk(user_id);
     if (!user) {
-      throw Error('This User does not exist');
+      throw new ConflictException('This User does not exist');
     }
 
     const cardNumber = await generateUniqueCardNumber();

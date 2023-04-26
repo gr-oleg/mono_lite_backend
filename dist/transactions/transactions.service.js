@@ -33,16 +33,16 @@ let TransactionsService = class TransactionsService {
         const senderCard = await this.getCurrentCard();
         const receiverCard = await this.getReceiverCard(dto);
         if (senderCard.blocked) {
-            throw new Error('Ви наказані!) - картку заблоковано!)');
+            throw new common_1.ConflictException('Ви наказані!) - картку заблоковано!)');
         }
         if (receiverCard.card_number === senderCard.card_number) {
-            throw new Error('Ти шо,самий мудрий ?!');
+            throw new common_1.ConflictException('Ти шо,самий мудрий ?!');
         }
         const sender_full_name = senderCard.owner_name + ' ' + senderCard.owner_surname;
         const full_name = receiverCard.owner_name + ' ' + receiverCard.owner_surname;
         const amount = dto.transaction_amount;
         if (amount > senderCard.card_balance) {
-            throw new Error('Йди на роботу! -- Недостатньо коштів 💵');
+            throw new common_1.ConflictException('Йди на роботу! -- Недостатньо коштів 💵');
         }
         const description = dto.transaction_description;
         const type = 'TRANSFER';
@@ -79,7 +79,7 @@ let TransactionsService = class TransactionsService {
             throw new Error('Не шукай вітру в полі! -- Користувача з такою 💳 не знайдено.');
         }
         if (receiverCard.blocked) {
-            throw new Error('Стоїть в кутку - наказаний(а)! -- Цю карту заблоковано!');
+            throw new common_1.ConflictException('Стоїть в кутку - наказаний(а)! -- Цю карту заблоковано!');
         }
         return receiverCard;
     }
@@ -100,13 +100,13 @@ let TransactionsService = class TransactionsService {
         const amount = dto.transaction_amount;
         const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
         if (amount > 50000) {
-            throw new Error('Нічого не злипнеться?!🍑');
+            throw new common_1.ConflictException('Нічого не злипнеться?!🍑');
         }
         if (!currCard.blocked) {
             await this.cardRepository.update({ card_balance: +currCard.card_balance + +amount }, { where: { card_id: currCard.card_id } });
         }
         else
-            throw new Error('Догралися! - картку заблоковано!)');
+            throw new common_1.ConflictException('Догралися! - картку заблоковано!)');
         if (currCard.card_balance < 200000) {
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: currCard.card_id,
@@ -122,7 +122,7 @@ let TransactionsService = class TransactionsService {
         }
         else {
             await this.cardRepository.update({ blocked: true, blockReason: 'Overdrafting' }, { where: { card_id: currCard.card_id } });
-            throw new Error('Догралися! - картку заблоковано!)');
+            throw new common_1.ConflictException('Догралися! - картку заблоковано!)');
         }
     }
     async simulateWithdrawal(dto) {
@@ -145,7 +145,7 @@ let TransactionsService = class TransactionsService {
             return createdTransaction;
         }
         const dontEnough = amount - currCard.card_balance;
-        return new Error(`До повного щастя вам бракує ${dontEnough} ₴`);
+        throw new common_1.ConflictException(`До повного щастя вам бракує ${dontEnough} ₴`);
     }
     async getAllTransactions() {
         const transactions = await this.transactionModel.findAll();
