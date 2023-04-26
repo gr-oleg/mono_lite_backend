@@ -5,6 +5,7 @@ declare enum TransactionStatus {
 }
 interface TransactionCreateAttrs {
     sender_card_id: number;
+    sender_full_name: string;
     receiver_card_id: number;
     receiver_card_number: string;
     receiver_full_name: string;
@@ -15,6 +16,7 @@ interface TransactionCreateAttrs {
 export declare class Transaction extends Model<Transaction, TransactionCreateAttrs> {
     transaction_id: number;
     sender_card_id: number;
+    sender_full_name: string;
     receiver_card_id: number;
     receiver_card_number: string;
     receiver_full_name: string;

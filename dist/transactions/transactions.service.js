@@ -33,15 +33,16 @@ let TransactionsService = class TransactionsService {
         const senderCard = await this.getCurrentCard();
         const receiverCard = await this.getReceiverCard(dto);
         if (senderCard.blocked) {
-            throw new common_1.HttpException('Ви наказані!) - картку заблоковано!)', common_1.HttpStatus.OK);
+            throw new Error('Ви наказані!) - картку заблоковано!)');
         }
         if (receiverCard.card_number === senderCard.card_number) {
-            throw new common_1.HttpException('Ти шо,самий мудрий ?!', common_1.HttpStatus.BAD_REQUEST);
+            throw new Error('Ти шо,самий мудрий ?!');
         }
+        const sender_full_name = senderCard.owner_name + ' ' + senderCard.owner_surname;
         const full_name = receiverCard.owner_name + ' ' + receiverCard.owner_surname;
         const amount = dto.transaction_amount;
         if (amount > senderCard.card_balance) {
-            throw new common_1.HttpException('Йди на роботу! -- Недостатньо коштів 💵', common_1.HttpStatus.BAD_REQUEST);
+            throw new Error('Йди на роботу! -- Недостатньо коштів 💵');
         }
         const description = dto.transaction_description;
         const type = 'TRANSFER';
@@ -51,6 +52,7 @@ let TransactionsService = class TransactionsService {
             await this.cardRepository.update({ card_balance: +receiverCard.card_balance + +amount }, { where: { card_id: receiverCard.card_id }, transaction });
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: senderCard.card_id,
+                sender_full_name: sender_full_name,
                 receiver_card_id: receiverCard.card_id,
                 receiver_card_number: receiverCard.card_number,
                 receiver_full_name: full_name,
@@ -74,10 +76,10 @@ let TransactionsService = class TransactionsService {
     async getReceiverCard(dto) {
         const receiverCard = await this.cardService.getCardByNumber(dto.receiver_card_number);
         if (!receiverCard) {
-            throw new common_1.HttpException('Не шукай вітру в полі! -- Користувача з такою 💳 не знайдено.', common_1.HttpStatus.NOT_FOUND);
+            throw new Error('Не шукай вітру в полі! -- Користувача з такою 💳 не знайдено.');
         }
         if (receiverCard.blocked) {
-            throw new common_1.HttpException('Стоїть в кутку - наказаний(а)! -- Цю карту заблоковано!', common_1.HttpStatus.BAD_REQUEST);
+            throw new Error('Стоїть в кутку - наказаний(а)! -- Цю карту заблоковано!');
         }
         return receiverCard;
     }
@@ -96,17 +98,19 @@ let TransactionsService = class TransactionsService {
     async simulateDeposit(dto) {
         const currCard = await this.getCurrentCard();
         const amount = dto.transaction_amount;
+        const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
         if (amount > 50000) {
-            throw new common_1.HttpException('Нічого не злипнеться?!🍑', common_1.HttpStatus.BAD_REQUEST);
+            throw new Error('Нічого не злипнеться?!🍑');
         }
         if (!currCard.blocked) {
             await this.cardRepository.update({ card_balance: +currCard.card_balance + +amount }, { where: { card_id: currCard.card_id } });
         }
         else
-            throw new common_1.HttpException('Догралися! - картку заблоковано!)', common_1.HttpStatus.OK);
+            throw new Error('Догралися! - картку заблоковано!)');
         if (currCard.card_balance < 200000) {
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: currCard.card_id,
+                sender_full_name: full_name,
                 receiver_card_id: currCard.card_id,
                 receiver_card_number: currCard.card_number,
                 receiver_full_name: 'GIFT 🎁',
@@ -118,17 +122,19 @@ let TransactionsService = class TransactionsService {
         }
         else {
             await this.cardRepository.update({ blocked: true, blockReason: 'Overdrafting' }, { where: { card_id: currCard.card_id } });
-            throw new common_1.HttpException('Догралися! - картку заблоковано!)', common_1.HttpStatus.UNAUTHORIZED);
+            throw new Error('Догралися! - картку заблоковано!)');
         }
     }
     async simulateWithdrawal(dto) {
         const currCard = await this.getCurrentCard();
         const amount = dto.transaction_amount;
+        const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
         if (+amount <= +currCard.card_balance) {
             await this.cardRepository.update({ card_balance: currCard.card_balance - amount }, { where: { card_id: currCard.card_id } });
             await this.updateCashBackBalance(amount);
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: currCard.card_id,
+                sender_full_name: full_name,
                 receiver_card_id: 3,
                 receiver_card_number: '537568651241322777',
                 receiver_full_name: 'Expension 💵',
@@ -139,7 +145,7 @@ let TransactionsService = class TransactionsService {
             return createdTransaction;
         }
         const dontEnough = amount - currCard.card_balance;
-        return new common_1.HttpException(`До повного щастя вам бракує ${dontEnough} ₴`, common_1.HttpStatus.BAD_REQUEST);
+        return new Error(`До повного щастя вам бракує ${dontEnough} ₴`);
     }
     async getAllTransactions() {
         const transactions = await this.transactionModel.findAll();
@@ -147,8 +153,9 @@ let TransactionsService = class TransactionsService {
     }
     async updateCashBackBalance(amount) {
         const currCard = await this.getCurrentCard();
-        const currCashBackVault = await this.cashBackModel.findOne({
+        const [currCashBackVault, created] = await this.cashBackModel.findOrCreate({
             where: { card_id: currCard.card_id },
+            defaults: { cashback_balance: 0 },
         });
         await this.cashBackModel.update({
             cashback_balance: currCashBackVault.cashback_balance + +amount * 0.02,

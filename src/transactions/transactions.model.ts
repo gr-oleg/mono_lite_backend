@@ -3,11 +3,10 @@ import {
   Column,
   DataType,
   ForeignKey,
-  BelongsTo,
-  BeforeCreate,
   Table,
 } from 'sequelize-typescript';
 import { Card } from '../cards/card.model';
+import { DataTypes } from 'sequelize';
 
 enum TransactionStatus {
   SUCCESSFUL = 'SUCCESSFUL',
@@ -16,6 +15,7 @@ enum TransactionStatus {
 
 interface TransactionCreateAttrs {
   sender_card_id: number;
+  sender_full_name: string;
   receiver_card_id: number;
   receiver_card_number: string;
   receiver_full_name: string;
@@ -27,7 +27,7 @@ interface TransactionCreateAttrs {
 @Table({ tableName: 'Transaction' })
 export class Transaction extends Model<Transaction, TransactionCreateAttrs> {
   @Column({
-    type: DataType.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
@@ -36,58 +36,64 @@ export class Transaction extends Model<Transaction, TransactionCreateAttrs> {
 
   //   @ForeignKey(() => Card)
   @Column({
-    type: DataType.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   })
   sender_card_id: number;
+  
+  @Column({
+    type: DataTypes.STRING,
+    allowNull: false,
+  })
+  sender_full_name: string;
 
   @ForeignKey(() => Card)
   @Column({
-    type: DataType.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   })
   receiver_card_id: number;
 
   @Column({
-    type: DataType.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   })
   receiver_card_number: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   })
   receiver_full_name: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataTypes.STRING,
     allowNull: true,
     defaultValue: '',
   })
   transaction_description: string;
 
   @Column({
-    type: DataType.FLOAT,
+    type: DataTypes.FLOAT,
     allowNull: false,
   })
   transaction_amount: number;
 
   @Column({
-    type: DataType.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   })
   transaction_type: string;
 
   @Column({
-    type: DataType.DATE,
+    type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataType.NOW,
+    defaultValue: DataTypes.NOW,
   })
   transaction_date: Date;
 
   @Column({
-    type: DataType.ENUM('success', 'failure'),
+    type: DataTypes.ENUM('success', 'failure'),
     allowNull: false,
     defaultValue: 'success',
   })

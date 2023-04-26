@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transaction = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const card_model_1 = require("../cards/card.model");
+const sequelize_1 = require("sequelize");
 var TransactionStatus;
 (function (TransactionStatus) {
     TransactionStatus["SUCCESSFUL"] = "SUCCESSFUL";
@@ -21,7 +22,7 @@ let Transaction = class Transaction extends sequelize_typescript_1.Model {
 };
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.INTEGER,
+        type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
@@ -30,36 +31,43 @@ __decorate([
 ], Transaction.prototype, "transaction_id", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.INTEGER,
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     }),
     __metadata("design:type", Number)
 ], Transaction.prototype, "sender_card_id", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    }),
+    __metadata("design:type", String)
+], Transaction.prototype, "sender_full_name", void 0);
+__decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => card_model_1.Card),
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.INTEGER,
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     }),
     __metadata("design:type", Number)
 ], Transaction.prototype, "receiver_card_id", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     }),
     __metadata("design:type", String)
 ], Transaction.prototype, "receiver_card_number", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     }),
     __metadata("design:type", String)
 ], Transaction.prototype, "receiver_full_name", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true,
         defaultValue: '',
     }),
@@ -67,29 +75,29 @@ __decorate([
 ], Transaction.prototype, "transaction_description", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.FLOAT,
+        type: sequelize_1.DataTypes.FLOAT,
         allowNull: false,
     }),
     __metadata("design:type", Number)
 ], Transaction.prototype, "transaction_amount", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     }),
     __metadata("design:type", String)
 ], Transaction.prototype, "transaction_type", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.DATE,
+        type: sequelize_1.DataTypes.DATE,
         allowNull: false,
-        defaultValue: sequelize_typescript_1.DataType.NOW,
+        defaultValue: sequelize_1.DataTypes.NOW,
     }),
     __metadata("design:type", Date)
 ], Transaction.prototype, "transaction_date", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.ENUM('success', 'failure'),
+        type: sequelize_1.DataTypes.ENUM('success', 'failure'),
         allowNull: false,
         defaultValue: 'success',
     }),
