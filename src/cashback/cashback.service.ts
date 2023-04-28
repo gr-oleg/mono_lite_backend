@@ -41,6 +41,7 @@ export class CashbackService {
 
       const transaction = await this.transactionModel.create({
         sender_card_id: Math.random(),
+        sender_full_name: 'CASH-BACK',
         receiver_card_id: currCard.card_id,
         receiver_card_number: currCard.card_number,
         receiver_full_name: currCard.owner_name + ' ' + currCard.owner_surname,

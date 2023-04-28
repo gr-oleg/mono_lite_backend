@@ -58,6 +58,7 @@ export class AuthService {
       email: user.email,
       first_name: user.first_name,
       second_name: user.second_name,
+      imageURL:user.imageURL
     };
     return {
       token: this.jwtService.sign(payload),
