@@ -19,34 +19,22 @@ const api_use_tags_decorator_1 = require("@nestjs/swagger/dist/decorators/api-us
 const create_user_dto_1 = require("./dto/create-user.dto");
 const user_model_1 = require("./user.model");
 const users_service_1 = require("./users.service");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    async create(userDto) {
-        const newUser = await this.usersService.createUser(userDto);
-        return newUser;
-    }
     getAll() {
         return this.usersService.getAllUsers();
     }
-    async getCardById(user_id) {
-        const user = await this.usersService.getUserById(user_id);
+    async getUser(id) {
+        const user = await this.usersService.getUserById(id);
         return user;
     }
     async deleteUser(dto) {
         return await this.usersService.deleteUser(dto);
     }
 };
-__decorate([
-    (0, dist_1.ApiOperation)({ summary: 'Create User and Card' }),
-    (0, dist_1.ApiResponse)({ status: 200, type: user_model_1.User }),
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.createUserDto]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "create", null);
 __decorate([
     (0, dist_1.ApiOperation)({ summary: 'Get All Users' }),
     (0, dist_1.ApiResponse)({ status: 200, type: [user_model_1.User] }),
@@ -56,14 +44,14 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAll", null);
 __decorate([
-    (0, dist_1.ApiOperation)({ summary: 'Get User bu ID' }),
+    (0, dist_1.ApiOperation)({ summary: 'Get User by ID' }),
     (0, dist_1.ApiResponse)({ status: 200, type: [user_model_1.User] }),
     (0, common_1.Get)(':user_id'),
-    __param(0, (0, common_1.Param)('user_id')),
+    __param(0, (0, common_1.Param)(':id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "getCardById", null);
+], UsersController.prototype, "getUser", null);
 __decorate([
     (0, common_1.Post)('/delete'),
     __param(0, (0, common_1.Body)()),

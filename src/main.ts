@@ -3,6 +3,7 @@ import { DocumentBuilder } from "@nestjs/swagger";
 import { SwaggerModule } from "@nestjs/swagger/dist";
 import { AppModule } from "./app.module";
 import * as cors from 'cors'
+import { JwtAuthGuard } from "./auth/jwt-auth.guard";
 
 
 async function start() {
@@ -26,6 +27,7 @@ async function start() {
       allowedHeaders: ['Content-Type'],
     }),
   );
+
 
   await app.listen(PORT, () => console.log(`Server is now going on port ${PORT}`))
 }

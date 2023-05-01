@@ -1,5 +1,5 @@
 import { Card } from 'src/cards/card.model';
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Transaction } from './transactions.model';
 import { createTransactionDto } from './dto/create-transaction.dto';
@@ -7,6 +7,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { CardsService } from 'src/cards/cards.service';
 import { Op } from 'sequelize';
 import { CashBack } from 'src/cashback/cashback.model';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class TransactionsService {
@@ -19,7 +20,7 @@ export class TransactionsService {
   ) {}
 
   async createTransaction(dto: createTransactionDto) {
-    const senderCard = await this.getCurrentCard();
+    const senderCard = await this.getCurrentCard(dto.user_id);
     const receiverCard = await this.getReceiverCard(dto);
 
     if (senderCard.blocked) {
@@ -82,10 +83,9 @@ export class TransactionsService {
     }
   }
 
-  async getCurrentCard() {
-    const sender = await this.authService.getUserInfoFromToken();
-    const senderCard = await this.cardService.getCardById(sender.id);
-    return senderCard;
+  async getCurrentCard(id:number) {
+    const currCard = await this.cardService.getCardById(id);
+    return currCard;
   }
 
   async getReceiverCard(dto: createTransactionDto) {
@@ -94,7 +94,7 @@ export class TransactionsService {
     );
 
     if (!receiverCard) {
-      throw new Error(
+      throw new NotFoundException(
         'Не шукай вітру в полі! -- Користувача з такою 💳 не знайдено.',
       );
     }
@@ -108,8 +108,9 @@ export class TransactionsService {
     return receiverCard;
   }
 
-  async getUsersTransactions() {
-    const userCard = await this.getCurrentCard();
+  async getUsersTransactions(id: number) {
+    console.log(id);
+    const userCard = await this.getCurrentCard(id);
     const transactions = await this.transactionModel.findAll({
       where: {
         [Op.or]: [
@@ -122,7 +123,7 @@ export class TransactionsService {
   }
 
   async simulateDeposit(dto: createTransactionDto) {
-    const currCard = await this.getCurrentCard();
+    const currCard = await this.getCurrentCard(dto.user_id);
     const amount = dto.transaction_amount;
     const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
 
@@ -157,8 +158,8 @@ export class TransactionsService {
     }
   }
 
-  async simulateWithdrawal(dto: createTransactionDto) {
-    const currCard = await this.getCurrentCard();
+  async simulateWithdrawal(dto: createTransactionDto,) {
+    const currCard = await this.getCurrentCard(dto.user_id);
     const amount = dto.transaction_amount;
     const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
 
@@ -168,7 +169,7 @@ export class TransactionsService {
         { where: { card_id: currCard.card_id } },
       );
 
-      await this.updateCashBackBalance(amount);
+      await this.updateCashBackBalance(dto);
 
       const createdTransaction = await this.transactionModel.create({
         sender_card_id: currCard.card_id,
@@ -191,8 +192,9 @@ export class TransactionsService {
     return transactions;
   }
 
-  async updateCashBackBalance(amount: number) {
-    const currCard = await this.getCurrentCard();
+  async updateCashBackBalance(dto: createTransactionDto) {
+    const currCard = await this.getCurrentCard(dto.user_id);
+    const amount = +dto.transaction_amount
     const [currCashBackVault, created] = await this.cashBackModel.findOrCreate({
       where: { card_id: currCard.card_id },
       defaults: { cashback_balance: 0 },

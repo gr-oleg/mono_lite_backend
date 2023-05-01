@@ -1,4 +1,4 @@
-import { ConflictException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ConflictException,Injectable ,BadRequestException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CashBack } from './cashback.model';
 import { TransactionsService } from 'src/transactions/transactions.service';
@@ -19,7 +19,7 @@ export class CashbackService {
 
   async getCashBackToBalance(dto: CashBackDto) {
     const amount = dto.amount;
-    const currCard = await this.transactionService.getCurrentCard();
+    const currCard = await this.transactionService.getCurrentCard(dto.user_id);
     const currStorage = await this.cashbackModel.findOne({
       where: { card_id: currCard.card_id },
     });
@@ -52,17 +52,17 @@ export class CashbackService {
 
       return transaction;
     } else if (currStorage.cashback_balance < amount) {
-      throw new ConflictException('Ти кого хочеш намахати?');
+      throw new BadRequestException('Ти кого хочеш намахати?');
     }
   }
 
-  async showBalance() {
-    // await this.updateCashBackBalance();
-    const currCard = await this.transactionService.getCurrentCard();
-    const currStorage = await this.cashbackModel.findOne({
+  async showBalance(id:number) {
+    const currCard = await this.transactionService.getCurrentCard(id);
+    const [currCashBackVault, created] = await this.cashbackModel.findOrCreate({
       where: { card_id: currCard.card_id },
+      defaults: { cashback_balance: 0 },
     });
-    const balance = currStorage.cashback_balance;
+    const balance = currCashBackVault.cashback_balance;
     return balance;
   }
 }

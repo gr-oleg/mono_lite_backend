@@ -1,4 +1,4 @@
-import { Controller, Post,Get, Body } from '@nestjs/common';
+import { Controller, Post,Get, Body, Param } from '@nestjs/common';
 import { createTransactionDto } from './dto/create-transaction.dto';
 import { TransactionsService } from './transactions.service';
 
@@ -22,9 +22,9 @@ constructor(private transactionService: TransactionsService){}
         return this.transactionService.simulateWithdrawal(dto)
     }
 
-    @Get()
-    getUserTransactions() {
-        return this.transactionService.getUsersTransactions();
+    @Get('/:id')
+    getUserTransactions(@Param('id') id: number) {
+        return this.transactionService.getUsersTransactions(id);
     }
     
     @Get('/all')

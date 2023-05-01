@@ -1,3 +1,4 @@
 export class CashBackDto{
-    amount: number;
+    readonly user_id: number;
+    readonly amount: number;
 }

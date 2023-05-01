@@ -51,8 +51,7 @@ export class User extends Model<User, UserCreationsAttrs> {
     type: DataType.STRING,
     allowNull: false,
   })
-    second_name: string;
-    
+  second_name: string;
 
   @ApiProperty({ example: '5375 4114 ...', description: "User's card number" })
   @Column({
@@ -60,7 +59,7 @@ export class User extends Model<User, UserCreationsAttrs> {
     allowNull: true,
   })
   card_number: string;
-  
+
   @Column({
     type: DataType.STRING,
     allowNull: true,
@@ -68,8 +67,8 @@ export class User extends Model<User, UserCreationsAttrs> {
   })
   imageURL: string;
 
-  
   @HasMany(() => Card, 'user_id')
   cards: Card[];
   static user_id: number;
+
 }

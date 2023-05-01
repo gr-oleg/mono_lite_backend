@@ -12,11 +12,11 @@ export declare class TransactionsService {
     private cardService;
     constructor(cardRepository: typeof Card, transactionModel: typeof Transaction, cashBackModel: typeof CashBack, authService: AuthService, cardService: CardsService);
     createTransaction(dto: createTransactionDto): Promise<Transaction>;
-    getCurrentCard(): Promise<Card>;
+    getCurrentCard(id: number): Promise<Card>;
     getReceiverCard(dto: createTransactionDto): Promise<Card>;
-    getUsersTransactions(): Promise<Transaction[]>;
+    getUsersTransactions(id: number): Promise<Transaction[]>;
     simulateDeposit(dto: createTransactionDto): Promise<Transaction>;
     simulateWithdrawal(dto: createTransactionDto): Promise<Transaction>;
     getAllTransactions(): Promise<Transaction[]>;
-    updateCashBackBalance(amount: number): Promise<void>;
+    updateCashBackBalance(dto: createTransactionDto): Promise<void>;
 }

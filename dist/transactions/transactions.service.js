@@ -30,7 +30,7 @@ let TransactionsService = class TransactionsService {
         this.cardService = cardService;
     }
     async createTransaction(dto) {
-        const senderCard = await this.getCurrentCard();
+        const senderCard = await this.getCurrentCard(dto.user_id);
         const receiverCard = await this.getReceiverCard(dto);
         if (senderCard.blocked) {
             throw new common_1.ConflictException('Ви наказані!) - картку заблоковано!)');
@@ -68,23 +68,23 @@ let TransactionsService = class TransactionsService {
             throw error;
         }
     }
-    async getCurrentCard() {
-        const sender = await this.authService.getUserInfoFromToken();
-        const senderCard = await this.cardService.getCardById(sender.id);
-        return senderCard;
+    async getCurrentCard(id) {
+        const currCard = await this.cardService.getCardById(id);
+        return currCard;
     }
     async getReceiverCard(dto) {
         const receiverCard = await this.cardService.getCardByNumber(dto.receiver_card_number);
         if (!receiverCard) {
-            throw new Error('Не шукай вітру в полі! -- Користувача з такою 💳 не знайдено.');
+            throw new common_1.NotFoundException('Не шукай вітру в полі! -- Користувача з такою 💳 не знайдено.');
         }
         if (receiverCard.blocked) {
             throw new common_1.ConflictException('Стоїть в кутку - наказаний(а)! -- Цю карту заблоковано!');
         }
         return receiverCard;
     }
-    async getUsersTransactions() {
-        const userCard = await this.getCurrentCard();
+    async getUsersTransactions(id) {
+        console.log(id);
+        const userCard = await this.getCurrentCard(id);
         const transactions = await this.transactionModel.findAll({
             where: {
                 [sequelize_2.Op.or]: [
@@ -96,7 +96,7 @@ let TransactionsService = class TransactionsService {
         return transactions;
     }
     async simulateDeposit(dto) {
-        const currCard = await this.getCurrentCard();
+        const currCard = await this.getCurrentCard(dto.user_id);
         const amount = dto.transaction_amount;
         const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
         if (amount > 50000) {
@@ -126,12 +126,12 @@ let TransactionsService = class TransactionsService {
         }
     }
     async simulateWithdrawal(dto) {
-        const currCard = await this.getCurrentCard();
+        const currCard = await this.getCurrentCard(dto.user_id);
         const amount = dto.transaction_amount;
         const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
         if (+amount <= +currCard.card_balance) {
             await this.cardRepository.update({ card_balance: currCard.card_balance - amount }, { where: { card_id: currCard.card_id } });
-            await this.updateCashBackBalance(amount);
+            await this.updateCashBackBalance(dto);
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: currCard.card_id,
                 sender_full_name: full_name,
@@ -151,8 +151,9 @@ let TransactionsService = class TransactionsService {
         const transactions = await this.transactionModel.findAll();
         return transactions;
     }
-    async updateCashBackBalance(amount) {
-        const currCard = await this.getCurrentCard();
+    async updateCashBackBalance(dto) {
+        const currCard = await this.getCurrentCard(dto.user_id);
+        const amount = +dto.transaction_amount;
         const [currCashBackVault, created] = await this.cashBackModel.findOrCreate({
             where: { card_id: currCard.card_id },
             defaults: { cashback_balance: 0 },

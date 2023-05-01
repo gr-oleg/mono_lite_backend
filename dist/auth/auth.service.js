@@ -23,27 +23,20 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
         this.cardService = cardService;
     }
-    async getUserInfoFromToken() {
-        const decodedToken = await this.jwtService.verifyAsync((await this.curToken).token);
-        const { id, email, first_name, second_name } = decodedToken;
-        return { id, email, first_name, second_name };
-    }
     async login(userDto) {
         const user = await this.validateUser(userDto);
         const token = this.generateToken(user);
-        this.curToken = token;
         return token;
     }
     async signUp(userDto) {
         const candidate = await this.userService.getUserbyEmail(userDto.email);
         if (candidate) {
-            throw new common_1.HttpException('Зайнято! -- Користувач з таким емейлом уже існує ', common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException('Зайнято! -- Користувач з таким емейлом уже існує(', common_1.HttpStatus.BAD_REQUEST);
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         const user = await this.userService.createUser(Object.assign(Object.assign({}, userDto), { password: hashPassword }));
         await this.cardService.createCard(user.user_id);
         const token = this.generateToken(user);
-        this.curToken = token;
         return token;
     }
     async generateToken(user) {

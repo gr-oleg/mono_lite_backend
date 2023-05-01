@@ -16,7 +16,7 @@ import { CardsModule } from 'src/cards/cards.module';
     forwardRef(() => AuthModule),
   ],
   exports: [
-    UsersService
+    UsersService,
   ]
 })
 export class UsersModule {}

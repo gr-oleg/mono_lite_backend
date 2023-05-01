@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs'
 import { User } from 'src/users/user.model';
 import { CardsService } from 'src/cards/cards.service';
 
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -13,22 +14,11 @@ export class AuthService {
     private jwtService: JwtService,
     private cardService: CardsService,
   ) {}
-
-  private curToken: Promise<{ token: string }>;
-
     
-
-  async getUserInfoFromToken() {
-    const decodedToken = await this.jwtService.verifyAsync(
-       (await this.curToken).token,
-    );
-    const { id, email, first_name, second_name } = decodedToken;
-    return { id, email, first_name, second_name };
-  }
+ 
   async login(userDto: createUserDto) {
     const user = await this.validateUser(userDto);
     const token = this.generateToken(user);
-    this.curToken = token;
     return token;
   }
   async signUp(userDto: createUserDto) {
@@ -36,7 +26,7 @@ export class AuthService {
 
     if (candidate) {
       throw new HttpException(
-        'Зайнято! -- Користувач з таким емейлом уже існує ',
+        'Зайнято! -- Користувач з таким емейлом уже існує(',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -48,7 +38,6 @@ export class AuthService {
     });
     await this.cardService.createCard(user.user_id);
     const token = this.generateToken(user);
-    this.curToken = token;
     return token;
   }
 

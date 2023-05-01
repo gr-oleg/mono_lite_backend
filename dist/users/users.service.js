@@ -44,7 +44,7 @@ let UsersService = class UsersService {
     async deleteUser(dto) {
         const user = await this.userRepository.findOne({ where: { email: dto.email } });
         if (!user) {
-            throw new common_1.HttpException('Пароль або емейл не вірні', common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.UnauthorizedException('Пароль або емейл не вірні');
         }
         const isValidPassword = await bcrypt.compare(dto.password, user.password);
         if (isValidPassword) {
@@ -52,7 +52,7 @@ let UsersService = class UsersService {
                 const cardDelete = await card_model_1.Card.destroy({ where: { user_id: user.user_id } });
                 const result = await user_model_1.User.destroy({ where: { email: user.email } });
                 if (result === 0 || cardDelete === 0) {
-                    throw new common_1.ConflictException('Користувач не знайдений');
+                    throw new common_1.NotFoundException('Користувач не знайдений');
                 }
                 return 'Користувач успішно видалений';
             }

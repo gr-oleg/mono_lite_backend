@@ -1,4 +1,4 @@
-import { Injectable,HttpException, HttpStatus, ConflictException } from '@nestjs/common';
+import { Injectable,HttpException, HttpStatus, ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { createUserDto } from './dto/create-user.dto';
@@ -37,7 +37,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({ where: { email: dto.email } });
     // return user;
     if (!user) {
-      throw new HttpException('Пароль або емейл не вірні', HttpStatus.BAD_REQUEST);
+      throw new UnauthorizedException('Пароль або емейл не вірні');
     }
 
     const isValidPassword = await bcrypt.compare(dto.password, user.password);
@@ -46,7 +46,7 @@ export class UsersService {
         const cardDelete = await Card.destroy({where: {user_id: user.user_id}}) ;
         const result = await User.destroy({ where: { email: user.email } });
         if (result === 0 || cardDelete === 0) {
-          throw new ConflictException('Користувач не знайдений');
+          throw new NotFoundException('Користувач не знайдений');
         }
         return 'Користувач успішно видалений';
       } catch (error) {

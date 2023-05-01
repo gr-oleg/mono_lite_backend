@@ -19,6 +19,7 @@ import { UsersService } from 'src/users/users.service';
     forwardRef(() => CardsModule),
     forwardRef(() => TransactionsModule),
 
+    
 
     JwtModule.register({
       secret: process.env.PRIVATE_KEY || 'SECRET',

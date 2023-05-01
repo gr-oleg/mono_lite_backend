@@ -22,14 +22,15 @@ let CardsService = class CardsService {
         this.cardModel = cardModel;
         this.userModel = userModel;
     }
-    async getCardById(card_id) {
-        const card = await this.cardModel.findByPk(card_id);
+    async getCardById(id) {
+        console.log(id);
+        const card = await this.cardModel.findByPk(id);
         return card;
     }
     async createCard(user_id) {
         const user = await this.userModel.findByPk(user_id);
         if (!user) {
-            throw new common_1.ConflictException('This User does not exist');
+            throw new common_1.NotFoundException('This User does not exist');
         }
         const cardNumber = await (0, card_model_1.generateUniqueCardNumber)();
         const codeCVV = await (0, card_model_1.generateCVV)();

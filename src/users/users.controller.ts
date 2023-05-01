@@ -1,9 +1,10 @@
-import { Controller, Post,Get, Body, Param} from '@nestjs/common';
+import { Controller, Post,Get, Body, Param, UseGuards} from '@nestjs/common';
 import { ApiResponse,ApiOperation } from '@nestjs/swagger/dist';
 import { ApiTags } from '@nestjs/swagger/dist/decorators/api-use-tags.decorator';
 import { createUserDto } from './dto/create-user.dto';
 import { User } from './user.model';
 import { UsersService } from './users.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 
 @ApiTags('Users')
@@ -13,27 +14,22 @@ export class UsersController {
     private usersService: UsersService,
   ) {}
 // Create or get users
-  @ApiOperation({ summary: 'Create User and Card' })
-  @ApiResponse({ status: 200, type: User  })
-  @Post()
-  async create(@Body() userDto: createUserDto) {
-    const newUser = await this.usersService.createUser(userDto);
-    return newUser;
-  }
+ 
 
   @ApiOperation({ summary: 'Get All Users' })
   @ApiResponse({ status: 200, type: [User] })
+  //  @UseGuards(JwtAuthGuard)  //Will be available in prod
   @Get()
   getAll() {
     return this.usersService.getAllUsers();
   }
 
     
-  @ApiOperation({ summary: 'Get User bu ID' })
+  @ApiOperation({ summary: 'Get User by ID' })
   @ApiResponse({ status: 200, type: [User] })
   @Get(':user_id')
-  async getCardById(@Param('user_id') user_id: number) {
-    const user = await this.usersService.getUserById(user_id);
+  async getUser(@Param(':id') id: number) {
+    const user = await this.usersService.getUserById(id);
     return user;
   }
 

@@ -14,59 +14,35 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CardsController = void 0;
 const common_1 = require("@nestjs/common");
-const create_card_dto_1 = require("./dto/create-card.dto");
 const cards_service_1 = require("./cards.service");
-const transactions_service_1 = require("../transactions/transactions.service");
 let CardsController = class CardsController {
-    constructor(cardsService, transactionService) {
+    constructor(cardsService) {
         this.cardsService = cardsService;
-        this.transactionService = transactionService;
-    }
-    async create(dto) {
-        const user_id = Number(dto);
-        return this.cardsService.createCard(user_id);
-    }
-    async getCardById(card_id) {
-        const card = await this.cardsService.getCardById(card_id);
-        return card;
     }
     getAll() {
         return this.cardsService.getAllCards();
     }
-    getUserCard() {
-        return this.transactionService.getCurrentCard();
+    getUserCard(id) {
+        return this.cardsService.getCardById(id);
     }
 };
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_card_dto_1.CreateCardDto]),
-    __metadata("design:returntype", Promise)
-], CardsController.prototype, "create", null);
-__decorate([
-    (0, common_1.Get)(':card_id'),
-    __param(0, (0, common_1.Param)('card_id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], CardsController.prototype, "getCardById", null);
-__decorate([
     (0, common_1.Get)('/all'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CardsController.prototype, "getAll", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('/:id'),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], CardsController.prototype, "getUserCard", null);
 CardsController = __decorate([
     (0, common_1.Controller)('cards'),
-    __metadata("design:paramtypes", [cards_service_1.CardsService,
-        transactions_service_1.TransactionsService])
+    __metadata("design:paramtypes", [cards_service_1.CardsService])
 ], CardsController);
 exports.CardsController = CardsController;
 //# sourceMappingURL=cards.controller.js.map
