@@ -8,6 +8,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { TransactionsModule } from 'src/transactions/transactions.module';
 import { CashbackModule } from 'src/cashback/cashback.module';
 import { UsersModule } from 'src/users/users.module';
+// import { LoansModule } from 'src/loans/loans.module';
 
 @Module({
   controllers: [CardsController],
@@ -17,6 +18,7 @@ import { UsersModule } from 'src/users/users.module';
     forwardRef(() => TransactionsModule),
     forwardRef(() => CashbackModule),
     forwardRef(() => UsersModule),
+    // forwardRef(() => LoansModule),
 
     SequelizeModule.forFeature([Card, User]),
   ],

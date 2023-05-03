@@ -23,6 +23,10 @@ const auth_module_1 = require("./auth/auth.module");
 const piggybank_module_1 = require("./piggybank/piggybank.module");
 const cashback_module_1 = require("./cashback/cashback.module");
 const cashback_model_1 = require("./cashback/cashback.model");
+const piggybank_model_1 = require("./piggybank/piggybank.model");
+const loans_module_1 = require("./loans/loans.module");
+const deposits_module_1 = require("./deposits/deposits.module");
+const loans_model_1 = require("./loans/loans.model");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -55,7 +59,7 @@ AppModule = __decorate([
                         encrypt: true,
                         trustServerCertificate: false,
                     },
-                    models: [user_model_1.User, card_model_1.Card, transactions_model_1.Transaction, cashback_model_1.CashBack],
+                    models: [user_model_1.User, card_model_1.Card, transactions_model_1.Transaction, cashback_model_1.CashBack, piggybank_model_1.PiggyBank, loans_model_1.Loan],
                     autoLoadModels: true,
                 }),
             }),
@@ -65,9 +69,11 @@ AppModule = __decorate([
             transactions_module_1.TransactionsModule,
             piggybank_module_1.PiggybankModule,
             cashback_module_1.CashbackModule,
+            loans_module_1.LoansModule,
+            deposits_module_1.DepositsModule,
         ],
         exports: [
-            auth_module_1.AuthModule
+            auth_module_1.AuthModule,
         ]
     })
 ], AppModule);

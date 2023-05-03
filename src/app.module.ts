@@ -14,6 +14,13 @@ import { AuthModule } from './auth/auth.module';
 import { PiggybankModule } from './piggybank/piggybank.module';
 import { CashbackModule } from './cashback/cashback.module';
 import { CashBack } from './cashback/cashback.model';
+import { PiggyBank } from './piggybank/piggybank.model';
+import { LoansService } from './loans/loans.service';
+import { LoansModule } from './loans/loans.module';
+import { DepositsController } from './deposits/deposits.controller';
+import { DepositsService } from './deposits/deposits.service';
+import { DepositsModule } from './deposits/deposits.module';
+import { Loan } from './loans/loans.model';
 
 
 
@@ -46,7 +53,7 @@ import { CashBack } from './cashback/cashback.model';
           encrypt: true,
           trustServerCertificate: false,
         },
-        models: [User, Card, Transaction,CashBack],
+        models: [User, Card, Transaction,CashBack,PiggyBank,Loan],
         autoLoadModels: true,
       }),
     }),
@@ -56,9 +63,11 @@ import { CashBack } from './cashback/cashback.model';
     TransactionsModule,
     PiggybankModule,
     CashbackModule,
+    LoansModule,
+    DepositsModule,
   ],
   exports: [
-    AuthModule
+    AuthModule,
   ]
 })
 export class AppModule {}

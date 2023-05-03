@@ -7,13 +7,11 @@ import { Card } from 'src/cards/card.model';
 import { CardsModule } from 'src/cards/cards.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { CashbackModule } from 'src/cashback/cashback.module';
-import { CashbackService } from 'src/cashback/cashback.service';
 import { CashBack } from 'src/cashback/cashback.model';
-import { CardsService } from 'src/cards/cards.service';
-import { AuthService } from 'src/auth/auth.service';
-import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user.model';
-// import { CashBack } from 'src/cashback/cashback.model';
+// import { Loan } from 'src/loans/loans.model';
+// import { LoansModule } from 'src/loans/loans.module';
+
 
 @Module({
   controllers:[TransactionsController],
@@ -21,7 +19,9 @@ import { User } from 'src/users/user.model';
   imports: [
         forwardRef(() => CardsModule),
         forwardRef(() => AuthModule),
-        forwardRef(() => CashbackModule),
+    forwardRef(() => CashbackModule),
+    // forwardRef(() => LoansModule),
+        
     SequelizeModule.forFeature([Transaction,Card,CashBack,User])
   ],
   exports: [

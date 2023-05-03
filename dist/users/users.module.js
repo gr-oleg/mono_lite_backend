@@ -10,12 +10,11 @@ exports.UsersModule = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const card_model_1 = require("../cards/card.model");
-const cards_service_1 = require("../cards/cards.service");
 const user_model_1 = require("./user.model");
 const users_controller_1 = require("./users.controller");
 const users_service_1 = require("./users.service");
 const auth_module_1 = require("../auth/auth.module");
-const cards_module_1 = require("../cards/cards.module");
+const piggybank_model_1 = require("../piggybank/piggybank.model");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
@@ -23,7 +22,7 @@ UsersModule = __decorate([
         controllers: [users_controller_1.UsersController],
         providers: [users_service_1.UsersService],
         imports: [
-            sequelize_1.SequelizeModule.forFeature([user_model_1.User, card_model_1.Card]),
+            sequelize_1.SequelizeModule.forFeature([user_model_1.User, card_model_1.Card, piggybank_model_1.PiggyBank]),
             (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
         ],
         exports: [

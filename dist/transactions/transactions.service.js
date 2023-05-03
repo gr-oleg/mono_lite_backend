@@ -135,7 +135,7 @@ let TransactionsService = class TransactionsService {
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: currCard.card_id,
                 sender_full_name: full_name,
-                receiver_card_id: 3,
+                receiver_card_id: Math.random(),
                 receiver_card_number: '537568651241322777',
                 receiver_full_name: 'Expension 💵',
                 transaction_amount: amount,
