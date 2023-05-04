@@ -7,7 +7,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { CardsService } from 'src/cards/cards.service';
 import { Op } from 'sequelize';
 import { CashBack } from 'src/cashback/cashback.model';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class TransactionsService {

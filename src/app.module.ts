@@ -21,6 +21,7 @@ import { DepositsController } from './deposits/deposits.controller';
 import { DepositsService } from './deposits/deposits.service';
 import { DepositsModule } from './deposits/deposits.module';
 import { Loan } from './loans/loans.model';
+import { Deposit } from './deposits/deposit.model';
 
 
 
@@ -53,7 +54,7 @@ import { Loan } from './loans/loans.model';
           encrypt: true,
           trustServerCertificate: false,
         },
-        models: [User, Card, Transaction,CashBack,PiggyBank,Loan],
+        models: [User, Card, Transaction,CashBack,PiggyBank,Loan,Deposit],
         autoLoadModels: true,
       }),
     }),

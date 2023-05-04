@@ -109,7 +109,7 @@ let TransactionsService = class TransactionsService {
             throw new common_1.ConflictException('Догралися! - картку заблоковано!)');
         if (currCard.card_balance < 200000) {
             const createdTransaction = await this.transactionModel.create({
-                sender_card_id: currCard.card_id,
+                sender_card_id: Math.random(),
                 sender_full_name: full_name,
                 receiver_card_id: currCard.card_id,
                 receiver_card_number: currCard.card_number,
