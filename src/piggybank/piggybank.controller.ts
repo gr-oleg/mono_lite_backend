@@ -38,4 +38,13 @@ export class PiggybankController {
     withdrawFromVault(@Body() dto: createPigVaultDto) {
         return this.pigService.withdrawFromVault(dto);
     }
+    @Post('/title')
+    changeTitle(@Body() dto: createPigVaultDto) {
+        return this.pigService.changeVaultTitle(dto);
+    }
+    @Post('/sum')
+    changeTargetSum(@Body() dto: createPigVaultDto) {
+        return this.pigService.changeTargenSum(dto);
+    }
+
 }

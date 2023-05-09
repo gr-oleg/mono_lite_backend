@@ -11,4 +11,6 @@ export declare class PiggybankController {
     breakVault(dto: createPigVaultDto): Promise<import("../transactions/transactions.model").Transaction>;
     depositToVault(dto: createPigVaultDto): Promise<import("../transactions/transactions.model").Transaction>;
     withdrawFromVault(dto: createPigVaultDto): Promise<import("../transactions/transactions.model").Transaction>;
+    changeTitle(dto: createPigVaultDto): Promise<[affectedCount: number]>;
+    changeTargetSum(dto: createPigVaultDto): Promise<[affectedCount: number]>;
 }

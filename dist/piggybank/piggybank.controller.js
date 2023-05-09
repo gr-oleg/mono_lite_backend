@@ -44,6 +44,12 @@ let PiggybankController = class PiggybankController {
     withdrawFromVault(dto) {
         return this.pigService.withdrawFromVault(dto);
     }
+    changeTitle(dto) {
+        return this.pigService.changeVaultTitle(dto);
+    }
+    changeTargetSum(dto) {
+        return this.pigService.changeTargenSum(dto);
+    }
 };
 __decorate([
     (0, common_1.Get)('/:id'),
@@ -100,6 +106,20 @@ __decorate([
     __metadata("design:paramtypes", [create_Pig_Vault_dto_1.createPigVaultDto]),
     __metadata("design:returntype", void 0)
 ], PiggybankController.prototype, "withdrawFromVault", null);
+__decorate([
+    (0, common_1.Post)('/title'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_Pig_Vault_dto_1.createPigVaultDto]),
+    __metadata("design:returntype", void 0)
+], PiggybankController.prototype, "changeTitle", null);
+__decorate([
+    (0, common_1.Post)('/sum'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_Pig_Vault_dto_1.createPigVaultDto]),
+    __metadata("design:returntype", void 0)
+], PiggybankController.prototype, "changeTargetSum", null);
 PiggybankController = __decorate([
     (0, common_1.Controller)('piggybank'),
     __metadata("design:paramtypes", [piggybank_service_1.PiggybankService])
