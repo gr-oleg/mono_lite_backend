@@ -164,7 +164,7 @@ export class PiggybankService {
 
   async addContributor(dto: createPigVaultDto) {
     const targetVault = await this.vaultModel.findOne({
-      where: { id: dto.vault_id },
+      where: { vault_id: dto.vault_id },
     }); // Знаходимо запис в базі даних за його ідентифікатором
 
     if (!targetVault) {
@@ -195,6 +195,19 @@ export class PiggybankService {
       { where: { vault_id: dto.vault_id } },
     );
 
-    return updatedVault; 
+    return updatedVault;
+  }
+
+ 
+  async changeTargenSum(dto: createPigVaultDto) {
+    const targetVault = await this.vaultModel.findByPk(dto.vault_id);
+    const isOwner = dto.user_id === targetVault.user_id;
+    if (targetVault && isOwner) {
+      const updatedVault = await this.vaultModel.update(
+        { target_sum: dto.target_sum },
+        { where: { vault_id: targetVault.vault_id } },
+      );
+      return updatedVault;
+    } else throw new NotFoundException('Vault does not exist');
   }
 }

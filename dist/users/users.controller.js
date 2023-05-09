@@ -46,8 +46,8 @@ __decorate([
 __decorate([
     (0, dist_1.ApiOperation)({ summary: 'Get User by ID' }),
     (0, dist_1.ApiResponse)({ status: 200, type: [user_model_1.User] }),
-    (0, common_1.Get)(':user_id'),
-    __param(0, (0, common_1.Param)(':id')),
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)

@@ -140,7 +140,7 @@ let PiggybankService = class PiggybankService {
     }
     async addContributor(dto) {
         const targetVault = await this.vaultModel.findOne({
-            where: { id: dto.vault_id },
+            where: { vault_id: dto.vault_id },
         });
         if (!targetVault) {
             throw new Error(`PigVault with id ${dto.vault_id} not found.`);
@@ -162,6 +162,16 @@ let PiggybankService = class PiggybankService {
         }
         const updatedVault = await this.vaultModel.update({ contributors: null }, { where: { vault_id: dto.vault_id } });
         return updatedVault;
+    }
+    async changeTargenSum(dto) {
+        const targetVault = await this.vaultModel.findByPk(dto.vault_id);
+        const isOwner = dto.user_id === targetVault.user_id;
+        if (targetVault && isOwner) {
+            const updatedVault = await this.vaultModel.update({ target_sum: dto.target_sum }, { where: { vault_id: targetVault.vault_id } });
+            return updatedVault;
+        }
+        else
+            throw new common_1.NotFoundException('Vault does not exist');
     }
 };
 PiggybankService = __decorate([

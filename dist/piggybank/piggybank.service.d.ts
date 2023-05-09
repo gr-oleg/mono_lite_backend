@@ -18,4 +18,5 @@ export declare class PiggybankService {
     getAllVaults(): Promise<PiggyBank[]>;
     addContributor(dto: createPigVaultDto): Promise<[affectedCount: number]>;
     removeContributor(dto: createPigVaultDto): Promise<[affectedCount: number]>;
+    changeTargenSum(dto: createPigVaultDto): Promise<[affectedCount: number]>;
 }

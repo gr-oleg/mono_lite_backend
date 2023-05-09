@@ -27,8 +27,8 @@ export class UsersController {
     
   @ApiOperation({ summary: 'Get User by ID' })
   @ApiResponse({ status: 200, type: [User] })
-  @Get(':user_id')
-  async getUser(@Param(':id') id: number) {
+  @Get(':id')
+  async getUser(@Param('id') id: number) {
     const user = await this.usersService.getUserById(id);
     return user;
   }
