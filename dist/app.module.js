@@ -28,6 +28,7 @@ const loans_module_1 = require("./loans/loans.module");
 const deposits_module_1 = require("./deposits/deposits.module");
 const loans_model_1 = require("./loans/loans.model");
 const deposit_model_1 = require("./deposits/deposit.model");
+const schedule_1 = require("@nestjs/schedule");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -36,6 +37,7 @@ AppModule = __decorate([
         providers: [app_service_1.AppService],
         imports: [
             config_1.ConfigModule.forRoot({}),
+            schedule_1.ScheduleModule.forRoot(),
             sequelize_1.SequelizeModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],

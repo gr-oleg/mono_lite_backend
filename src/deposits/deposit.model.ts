@@ -62,9 +62,9 @@ export class Deposit extends Model<Deposit, DepositCreationAttrs> {
   @Column({
     type: DataTypes.DATEONLY,
     allowNull: false,
-    defaultValue: function (this: Deposit) {
+    defaultValue: function () {
       const now = new Date();
-      const futureDate = new Date(now.setMonth(now.getMonth() + this.term));
+      const futureDate = new Date(now.setMonth(now.getMonth() + 1));
       return futureDate;
     },
   })

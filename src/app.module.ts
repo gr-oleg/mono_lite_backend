@@ -22,6 +22,7 @@ import { DepositsService } from './deposits/deposits.service';
 import { DepositsModule } from './deposits/deposits.module';
 import { Loan } from './loans/loans.model';
 import { Deposit } from './deposits/deposit.model';
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 
@@ -30,6 +31,7 @@ import { Deposit } from './deposits/deposit.model';
   providers: [AppService],
   imports: [
     ConfigModule.forRoot({}),
+    ScheduleModule.forRoot(),
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -4,6 +4,7 @@ import { Loan } from './loans.model';
 import { createLoanDto } from './dto/createLoan.dto';
 import { Transaction } from 'src/transactions/transactions.model';
 import { Card } from 'src/cards/card.model';
+import { Cron, CronExpression } from '@nestjs/schedule/dist';
 
 @Injectable()
 export class LoansService {
@@ -20,22 +21,9 @@ export class LoansService {
       dto.interest_rate,
       dto.term,
     );
-    loan.update({ monthly_payment: monthlyPayment });
-
-    const initialAmountToPay = monthlyPayment;
-    let currentAmountToPay = initialAmountToPay;
-
-    for (let i = 1; i <= dto.term; i++) {
-      setTimeout(async () => {
-        currentAmountToPay = Math.ceil(currentAmountToPay * 1.05);
-        await this.increaseAmountToPay(loan.id, currentAmountToPay);
-        loan.update({ monthly_payment: currentAmountToPay });
-      }, i * 30 * 24 * 60 * 60 * 1000); // 30 days in milliseconds
-    }
-    if (loan) {
-      this.prepareTransaction('receive', dto);
-    }
-
+    await loan.update({ monthly_payment: monthlyPayment });
+    await this.calcEndDate(loan);
+    await this.prepareTransaction('receive', dto);
     return loan;
   }
 
@@ -45,19 +33,23 @@ export class LoansService {
     term: number,
   ): number {
     const monthlyInterestRate = interestRate / 12;
-    const payment =
-      (amount * monthlyInterestRate) /
-      (1 - Math.pow(1 + monthlyInterestRate, -term));
+    const payment = amount * monthlyInterestRate * (term + 1);
     return Math.ceil(payment);
   }
 
-  private async increaseAmountToPay(loanId: number, amountToIncrease: number) {
-    const loan = await this.loanModel.findByPk(loanId);
-    const newAmountToPay = loan.amount_to_pay + amountToIncrease;
-    await loan.update({ amount_to_pay: newAmountToPay });
+  // Will update amount every month
+  @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT)
+  async increaseAmountToPay() {
+    const loanVaults = await this.loanModel.findAll();
+    loanVaults.map((loan) => {
+      const newAmount =
+        loan.amount_to_pay + (loan.amount_to_pay * loan.interest_rate) / 12;
+      loan.update({ amount_to_pay: newAmount });
+    });
   }
 
   async prepareTransaction(operation: string, dto: createLoanDto) {
+    const currVault = await this.loanModel.findByPk(dto.id);
     const currCard = await this.cardModel.findByPk(dto.borrower_id);
     const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
     const descriptionTxt =
@@ -88,6 +80,11 @@ export class LoansService {
         { card_balance: currCard.card_balance - dto.amount },
         { where: { card_id: currCard.card_id } },
       );
+      await this.loanModel.update(
+        { amount_to_pay: currCard.card_balance - dto.amount },
+        { where: { id: currVault.id } },
+      );
+      this.checkIsRepaid(currVault);
     }
 
     return createdTransaction;
@@ -107,11 +104,12 @@ export class LoansService {
       return this.prepareTransaction('payment', dto);
     } else throw new ConflictException('Ховайся! Колєктори вже їдуть!');
   }
+
   async payFullLoan(dto: createLoanDto) {
     const currLoanVault = await this.loanModel.findOne({
       where: { borrower_id: dto.borrower_id },
     });
-      
+
     const currCard = await this.cardModel.findByPk(dto.borrower_id);
 
     const isEnough =
@@ -128,5 +126,20 @@ export class LoansService {
       where: { borrower_id: id },
     });
     return loan;
+  }
+
+  async calcEndDate(vault: Loan) {
+    const now = new Date();
+    const futureDate = new Date(now.setMonth(now.getMonth() + vault.term));
+    const updatedVault = await vault.update({ end_date: futureDate });
+    return updatedVault;
+  }
+
+  async checkIsRepaid(vault: Loan) {
+    const IsRepaid = vault.amount_to_pay <= 0;
+    if (IsRepaid) {
+      vault.destroy();
+      return 'Congratulations you are free for now!🎉';
+    } else return;
   }
 }

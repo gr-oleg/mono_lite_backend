@@ -4,7 +4,8 @@ import { Deposit } from './deposit.model';
 import { Card } from 'src/cards/card.model';
 import { Transaction } from 'src/transactions/transactions.model';
 import { createDepositDto } from './dto/createDeposit.dto';
-import { Op } from 'sequelize';
+import { Cron, CronExpression } from '@nestjs/schedule/dist';
+
 
 @Injectable()
 export class DepositsService {
@@ -14,36 +15,10 @@ export class DepositsService {
     @InjectModel(Transaction) private transactionModel: typeof Transaction,
   ) {}
 
-  // Declare a variable to hold the interval ID
-  private intervalId: any;
-
-  // Method to start the timer
-  startTimer() {
-    // Set the interval to run every 30 days (in milliseconds)
-    const intervalDuration = 30 * 24 * 60 * 60 * 1000;
-    this.intervalId = setInterval(() => {
-      // Call the payPercentage method for each deposit in the database
-      this.depositModel.findAll().then((deposits) => {
-        deposits.forEach((deposit) => {
-          this.payPercentage(deposit);
-        });
-      });
-    }, intervalDuration);
-
-    // Stop the timer for users whose end_date has passed
-    this.depositModel
-      .findAll({ where: { end_date: { [Op.lte]: new Date() } } })
-      .then((deposits) => {
-        deposits.forEach((deposit) => {
-          clearInterval(this.intervalId);
-        });
-      });
-  }
-
   async createDeposit(dto: createDepositDto) {
     const depositVault = await this.depositModel.create(dto);
     await this.calcMonthlyPayment(depositVault);
-    this.startTimer();
+    await this.calcEndDate(depositVault);
     return depositVault;
   }
 
@@ -96,11 +71,20 @@ export class DepositsService {
     await this.calcMonthlyPayment(await updatedVault);
     return updatedVault;
   }
+  @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_NOON)
+  async payPercentage() {
+    const vaults = await this.depositModel.findAll();
 
-  async payPercentage(vault: Deposit) {
-    const amount = vault.monthly_payment;
-
-    await this.makeTransaction('dividends', vault.user_id, amount);
+    const dividends = vaults.map((vault) =>
+      vault.end_date < new Date()
+        ? this.makeTransaction(
+            'dividends',
+            vault.user_id,
+            vault.monthly_payment,
+          )
+        : vault.destroy(),
+    );
+    return dividends;
   }
 
   async calcMonthlyPayment(vault: Deposit) {
@@ -111,11 +95,7 @@ export class DepositsService {
     const monthlyInterestRate = vault.interest_rate / 12;
 
     // Calculate monthly payment using formula
-    const monthlyPayment =
-      (totalAmount *
-        monthlyInterestRate *
-        Math.pow(1 + monthlyInterestRate, termInMonths)) /
-      (Math.pow(1 + monthlyInterestRate, termInMonths) - 1);
+    const monthlyPayment = totalAmount * monthlyInterestRate;
 
     // Update deposit with new monthly payment value
     const updatedVault = await vault.update({
@@ -124,14 +104,31 @@ export class DepositsService {
 
     return updatedVault;
   }
-    
-    async showUserVaults(id: number) {
-        const vaults = await this.depositModel.findAll({ where: { user_id: id } })
-        return vaults
-  }  
-    async showAllVaults() {
-        const vaults = await this.depositModel.findAll()
-        return vaults
-  }  
-    
+
+  async showUserVaults(id: number) {
+    const vaults = await this.depositModel.findAll({ where: { user_id: id } });
+    return vaults;
+  }
+  async showAllVaults() {
+    const vaults = await this.depositModel.findAll();
+    return vaults;
+  }
+
+  async calcEndDate(vault: Deposit) {
+    const now = new Date();
+    const futureDate = new Date(now.setMonth(now.getMonth() + vault.term));
+    const updatedVault = await vault.update({ end_date: futureDate });
+    return updatedVault;
+  }
+
+  async destroyVault(dto: createDepositDto) {
+    const vault = await this.depositModel.findByPk(dto.id);
+    try {
+      this.makeTransaction('dividends', vault.user_id, vault.amount);
+      await vault.destroy();
+      
+    } catch (error) {
+      console.log(error);
+    }; 
+  }
 }

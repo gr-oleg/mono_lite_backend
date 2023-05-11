@@ -24,4 +24,8 @@ export class DepositsController {
   async showAll() {
     return await this.depositsService.showAllVaults();
   }
+  @Post('/destroy')
+  async destroyVault(@Body() dto: createDepositDto) {
+    return await this.depositsService.destroyVault(dto);
+  }
 }
