@@ -6,7 +6,6 @@ import { Transaction } from 'src/transactions/transactions.model';
 import { createDepositDto } from './dto/createDeposit.dto';
 import { Cron, CronExpression } from '@nestjs/schedule/dist';
 
-
 @Injectable()
 export class DepositsService {
   constructor(
@@ -19,6 +18,8 @@ export class DepositsService {
     const depositVault = await this.depositModel.create(dto);
     await this.calcMonthlyPayment(depositVault);
     await this.calcEndDate(depositVault);
+    this.makeTransaction('deposit', dto.user_id, dto.amount);
+
     return depositVault;
   }
 
@@ -126,9 +127,8 @@ export class DepositsService {
     try {
       this.makeTransaction('dividends', vault.user_id, vault.amount);
       await vault.destroy();
-      
     } catch (error) {
       console.log(error);
-    }; 
+    }
   }
 }
