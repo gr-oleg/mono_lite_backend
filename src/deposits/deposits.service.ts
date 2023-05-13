@@ -125,7 +125,7 @@ export class DepositsService {
   async destroyVault(dto: createDepositDto) {
     const vault = await this.depositModel.findByPk(dto.id);
     try {
-      this.makeTransaction('dividends', vault.user_id, vault.amount);
+      await this.makeTransaction('dividends', vault.user_id, vault.amount);
       await vault.destroy();
     } catch (error) {
       console.log(error);

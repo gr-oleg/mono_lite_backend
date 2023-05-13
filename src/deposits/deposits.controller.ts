@@ -11,7 +11,7 @@ export class DepositsController {
     return await this.depositsService.createDeposit(dto);
   }
 
-  @Post('update')
+  @Post('/update')
   async updateAmountOfDeposit(@Body() dto: createDepositDto) {
     return await this.depositsService.updateAmountOfDeposit(dto);
   }
