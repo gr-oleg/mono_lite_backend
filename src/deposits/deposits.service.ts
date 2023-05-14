@@ -69,6 +69,7 @@ export class DepositsService {
     const updatedVault = (await currVault).update({
       amount: (await currVault).amount + dto.amount,
     });
+    await this.makeTransaction('deposit', dto.user_id, dto.amount);
     await this.calcMonthlyPayment(await updatedVault);
     return updatedVault;
   }

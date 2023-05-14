@@ -21,6 +21,7 @@ export class LoansService {
       dto.interest_rate,
       dto.term,
     );
+    await loan.update({ amount_to_pay: dto.amount });
     await loan.update({ monthly_payment: monthlyPayment });
     await this.calcEndDate(loan);
     await this.prepareTransaction('receive', dto);
@@ -92,7 +93,7 @@ export class LoansService {
 
   async payPartOfLoan(dto: createLoanDto) {
     const currLoanVault = await this.loanModel.findOne({
-      where: { borrower_id: dto.borrower_id },
+      where: { borrower_id: dto.id },
     });
     const currCard = await this.cardModel.findByPk(dto.borrower_id);
 
@@ -107,7 +108,7 @@ export class LoansService {
 
   async payFullLoan(dto: createLoanDto) {
     const currLoanVault = await this.loanModel.findOne({
-      where: { borrower_id: dto.borrower_id },
+      where: { borrower_id: dto.id },
     });
 
     const currCard = await this.cardModel.findByPk(dto.borrower_id);
@@ -117,12 +118,13 @@ export class LoansService {
       dto.amount <= currCard.card_balance;
 
     if (isEnough) {
+      await currLoanVault.destroy();
       return this.prepareTransaction('payment', dto);
     }
   }
 
   async showLoanEntity(id: number) {
-    const loan = await this.loanModel.findOne({
+    const loan = await this.loanModel.findAll({
       where: { borrower_id: id },
     });
     return loan;

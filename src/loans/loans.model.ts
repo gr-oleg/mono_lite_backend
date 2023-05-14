@@ -37,9 +37,7 @@ export class Loan extends Model<Loan, LoanCreationAttrs> {
   @Column({
     type: DataTypes.FLOAT,
     allowNull: false,
-    defaultValue: function () {
-      return this.amount;
-    },
+    defaultValue: 10000.00,
   })
   amount_to_pay: number;
 
