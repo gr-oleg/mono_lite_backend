@@ -29,6 +29,8 @@ const deposits_module_1 = require("./deposits/deposits.module");
 const loans_model_1 = require("./loans/loans.model");
 const deposit_model_1 = require("./deposits/deposit.model");
 const schedule_1 = require("@nestjs/schedule");
+const currency_module_1 = require("./currency/currency.module");
+const currency_model_1 = require("./currency/currency.model");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -62,7 +64,7 @@ AppModule = __decorate([
                         encrypt: true,
                         trustServerCertificate: false,
                     },
-                    models: [user_model_1.User, card_model_1.Card, transactions_model_1.Transaction, cashback_model_1.CashBack, piggybank_model_1.PiggyBank, loans_model_1.Loan, deposit_model_1.Deposit],
+                    models: [user_model_1.User, card_model_1.Card, transactions_model_1.Transaction, cashback_model_1.CashBack, piggybank_model_1.PiggyBank, loans_model_1.Loan, deposit_model_1.Deposit, currency_model_1.Currency],
                     autoLoadModels: true,
                 }),
             }),
@@ -74,6 +76,7 @@ AppModule = __decorate([
             cashback_module_1.CashbackModule,
             loans_module_1.LoansModule,
             deposits_module_1.DepositsModule,
+            currency_module_1.CurrencyModule,
         ],
         exports: [
             auth_module_1.AuthModule,

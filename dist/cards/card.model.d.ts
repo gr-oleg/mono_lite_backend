@@ -10,6 +10,8 @@ export declare class Card extends Model<Card> {
     owner_surname: string;
     blocked: boolean;
     blockReason: string;
+    card_dollar_balance: number;
+    card_euro_balance: number;
     static generateCardNumber(card: Card): Promise<void>;
     user: User;
     static updateCardNumber(card: Card): Promise<void>;

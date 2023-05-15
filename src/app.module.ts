@@ -23,6 +23,8 @@ import { DepositsModule } from './deposits/deposits.module';
 import { Loan } from './loans/loans.model';
 import { Deposit } from './deposits/deposit.model';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CurrencyModule } from './currency/currency.module';
+import { Currency } from './currency/currency.model';
 
 
 
@@ -56,7 +58,7 @@ import { ScheduleModule } from '@nestjs/schedule';
           encrypt: true,
           trustServerCertificate: false,
         },
-        models: [User, Card, Transaction,CashBack,PiggyBank,Loan,Deposit],
+        models: [User, Card, Transaction,CashBack,PiggyBank,Loan,Deposit,Currency],
         autoLoadModels: true,
       }),
     }),
@@ -68,6 +70,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     CashbackModule,
     LoansModule,
     DepositsModule,
+    CurrencyModule,
   ],
   exports: [
     AuthModule,

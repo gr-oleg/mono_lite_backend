@@ -44,24 +44,23 @@ export class Card extends Model<Card> {
     allowNull: false,
     defaultValue: 0,
   })
-    card_balance: number;
-  
-    @ApiProperty({ example: '111', description: 'Secret CVV code' })
+  card_balance: number;
+
+  @ApiProperty({ example: '111', description: 'Secret CVV code' })
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    
   })
-    card_CVV: string;
-    
+  card_CVV: string;
+
   @ApiProperty({ example: 'Vitaliy', description: 'Card Owner Name' })
   @Column({
     type: DataType.STRING,
     allowNull: false,
     defaultValue: 0,
   })
-    owner_name: string;
-    
+  owner_name: string;
+
   @ApiProperty({ example: 'Havrona', description: 'Card Owner Surname' })
   @Column({
     type: DataType.STRING,
@@ -70,9 +69,6 @@ export class Card extends Model<Card> {
   })
   owner_surname: string;
 
-    
-    
-    
   @ApiProperty({ example: 'false', description: 'Is card blocked?' })
   @Column({
     type: DataType.BOOLEAN,
@@ -91,31 +87,42 @@ export class Card extends Model<Card> {
   })
   blockReason: string;
 
+  @ApiProperty({ example: '2000', description: 'Card Dollar Balance' })
+  @Column({
+    type: DataType.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  })
+  card_dollar_balance: number;
+
+  @ApiProperty({ example: '2000', description: 'Card Euro Balance' })
+  @Column({
+    type: DataType.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  })
+  card_euro_balance: number;
+
   @BelongsTo(() => User, {
     foreignKey: 'user_id',
     targetKey: 'user_id',
   })
-    
-    // @HasMany(() => )
-    
-  
+
+  // @HasMany(() => )
   @BeforeCreate({})
   static async generateCardNumber(card: Card) {
     const cardNumber = await generateUniqueCardNumber();
-    
   }
-  
-    @BelongsTo(() => User, 'user_id')
+
+  @BelongsTo(() => User, 'user_id')
   user: User;
-  
-    @AfterCreate
-    static async updateCardNumber(card: Card) {
-      const user = await card.$get('user'); // отримати власника карти
-      user.card_number = card.card_number; // оновити номер картки в користувача
-      await user.save(); // зберегти зміни в базі даних
-    }
-  
-  
+
+  @AfterCreate
+  static async updateCardNumber(card: Card) {
+    const user = await card.$get('user'); // отримати власника карти
+    user.card_number = card.card_number; // оновити номер картки в користувача
+    await user.save(); // зберегти зміни в базі даних
+  }
 }
 
 export async function generateUniqueCardNumber(): Promise<string> {
