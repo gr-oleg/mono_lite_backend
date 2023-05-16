@@ -107,24 +107,6 @@ __decorate([
     __metadata("design:type", String)
 ], Card.prototype, "blockReason", void 0);
 __decorate([
-    (0, decorators_1.ApiProperty)({ example: '2000', description: 'Card Dollar Balance' }),
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.FLOAT,
-        allowNull: false,
-        defaultValue: 0,
-    }),
-    __metadata("design:type", Number)
-], Card.prototype, "card_dollar_balance", void 0);
-__decorate([
-    (0, decorators_1.ApiProperty)({ example: '2000', description: 'Card Euro Balance' }),
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.FLOAT,
-        allowNull: false,
-        defaultValue: 0,
-    }),
-    __metadata("design:type", Number)
-], Card.prototype, "card_euro_balance", void 0);
-__decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User, 'user_id'),
     __metadata("design:type", user_model_1.User)
 ], Card.prototype, "user", void 0);
