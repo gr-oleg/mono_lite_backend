@@ -9,4 +9,7 @@ export declare class CardsService {
     getAllCards(): Promise<Card[]>;
     getCardsByUserId(user_id: number): Promise<Card>;
     getCardByNumber(card_number: string): Promise<Card>;
+    generateUniqueCardNumber(): Promise<string>;
+    generateRandomCardNumber(): Promise<string>;
+    generateCVV(): Promise<string>;
 }

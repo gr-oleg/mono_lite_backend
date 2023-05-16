@@ -32,8 +32,8 @@ let CardsService = class CardsService {
         if (!user) {
             throw new common_1.NotFoundException('This User does not exist');
         }
-        const cardNumber = await (0, card_model_1.generateUniqueCardNumber)();
-        const codeCVV = await (0, card_model_1.generateCVV)();
+        const cardNumber = await this.generateUniqueCardNumber();
+        const codeCVV = await this.generateCVV();
         const card = await this.cardModel.create({
             user_id: user_id,
             owner_name: user.first_name,
@@ -57,6 +57,34 @@ let CardsService = class CardsService {
     async getCardByNumber(card_number) {
         const card = await this.cardModel.findOne({ where: { card_number } });
         return card;
+    }
+    async generateUniqueCardNumber() {
+        const MAX_ATTEMPTS = 20;
+        let attempt = 0;
+        while (attempt < MAX_ATTEMPTS) {
+            const cardNumber = await this.generateRandomCardNumber();
+            const card = await this.cardModel.findOne({
+                where: { card_number: cardNumber },
+            });
+            if (!card) {
+                return cardNumber;
+            }
+            attempt++;
+        }
+        throw new Error('Could not generate unique card number');
+    }
+    async generateRandomCardNumber() {
+        const BIN = '5375';
+        const randomNumber = Math.floor(Math.random() * 999999999999);
+        const cardNumber = BIN + randomNumber.toString().padStart(14 - BIN.length, '0');
+        return cardNumber;
+    }
+    async generateCVV() {
+        const firstNumber = Math.floor(Math.random() * 9) + '';
+        const secondNumber = Math.floor(Math.random() * 9) + '';
+        const thirdNumber = Math.floor(Math.random() * 9) + '';
+        const CVV = firstNumber + secondNumber + thirdNumber;
+        return CVV;
     }
 };
 CardsService = __decorate([

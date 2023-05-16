@@ -1,6 +1,6 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Card, generateCVV, generateUniqueCardNumber } from './card.model';
+import { Card } from './card.model';
 import { User } from '../users/user.model';
 // import { TransactionsService } from 'src/transactions/transactions.service';
 // import { AuthService } from 'src/auth/auth.service';
@@ -10,8 +10,6 @@ export class CardsService {
   constructor(
     @InjectModel(Card) private cardModel: typeof Card,
     @InjectModel(User) private userModel: typeof User,
-  
-    
   ) {}
 
   async getCardById(id: number) {
@@ -25,15 +23,15 @@ export class CardsService {
       throw new NotFoundException('This User does not exist');
     }
 
-    const cardNumber = await generateUniqueCardNumber();
-    const codeCVV = await generateCVV();
+    const cardNumber = await this.generateUniqueCardNumber();
+    const codeCVV = await this.generateCVV();
     const card = await this.cardModel.create({
       user_id: user_id,
       owner_name: user.first_name,
       owner_surname: user.second_name,
       card_number: cardNumber,
       card_balance: 0,
-      card_CVV:codeCVV ,
+      card_CVV: codeCVV,
       blocked: false,
       blockReason: '',
     });
@@ -53,10 +51,42 @@ export class CardsService {
   }
 
   async getCardByNumber(card_number: string) {
-    const card = await this.cardModel.findOne({ where:{ card_number } });
-   
+    const card = await this.cardModel.findOne({ where: { card_number } });
+
     return card;
   }
 
-  
+  async generateUniqueCardNumber(): Promise<string> {
+    const MAX_ATTEMPTS = 20;
+    let attempt = 0;
+
+    while (attempt < MAX_ATTEMPTS) {
+      const cardNumber = await this.generateRandomCardNumber();
+      const card = await this.cardModel.findOne({
+        where: { card_number: cardNumber },
+      });
+      if (!card) {
+        return cardNumber;
+      }
+      attempt++;
+    }
+
+    throw new Error('Could not generate unique card number');
+  }
+
+  async generateRandomCardNumber() {
+    const BIN = '5375'; // Bank Identification Number
+    const randomNumber = Math.floor(Math.random() * 999999999999); // 14-digit random number
+    const cardNumber =
+      BIN + randomNumber.toString().padStart(14 - BIN.length, '0'); // 16-digit card number
+    return cardNumber;
+  }
+
+  async generateCVV() {
+    const firstNumber = Math.floor(Math.random() * 9) + '';
+    const secondNumber = Math.floor(Math.random() * 9) + '';
+    const thirdNumber = Math.floor(Math.random() * 9) + '';
+    const CVV = firstNumber + secondNumber + thirdNumber;
+    return CVV;
+  }
 }

@@ -93,8 +93,9 @@ export class LoansService {
 
   async payPartOfLoan(dto: createLoanDto) {
     const currLoanVault = await this.loanModel.findOne({
-      where: { borrower_id: dto.id },
+      where: { id: dto.id },
     });
+
     const currCard = await this.cardModel.findByPk(dto.borrower_id);
 
     const isEnough =
@@ -108,7 +109,7 @@ export class LoansService {
 
   async payFullLoan(dto: createLoanDto) {
     const currLoanVault = await this.loanModel.findOne({
-      where: { borrower_id: dto.id },
+      where: { id: dto.id },
     });
 
     const currCard = await this.cardModel.findByPk(dto.borrower_id);

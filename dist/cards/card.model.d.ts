@@ -12,7 +12,4 @@ export declare class Card extends Model<Card> {
     blockReason: string;
     static generateCardNumber(card: Card): Promise<void>;
     user: User;
-    static updateCardNumber(card: Card): Promise<void>;
 }
-export declare function generateUniqueCardNumber(): Promise<string>;
-export declare function generateCVV(): Promise<string>;

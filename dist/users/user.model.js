@@ -13,6 +13,7 @@ exports.User = void 0;
 const decorators_1 = require("@nestjs/swagger/dist/decorators");
 const sequelize_typescript_1 = require("sequelize-typescript");
 const card_model_1 = require("../cards/card.model");
+const userCurrency_model_1 = require("../currency/userCurrency.model");
 let User = class User extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -78,6 +79,10 @@ __decorate([
     (0, sequelize_typescript_1.HasMany)(() => card_model_1.Card, 'user_id'),
     __metadata("design:type", Array)
 ], User.prototype, "cards", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasOne)(() => userCurrency_model_1.UserCurrency, 'user_id'),
+    __metadata("design:type", userCurrency_model_1.UserCurrency)
+], User.prototype, "userCurrency", void 0);
 User = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'users' })
 ], User);

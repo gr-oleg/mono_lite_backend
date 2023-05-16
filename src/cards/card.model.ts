@@ -91,53 +91,19 @@ export class Card extends Model<Card> {
     foreignKey: 'user_id',
     targetKey: 'user_id',
   })
-
-  // @HasMany(() => )
+    
+// I left this piece of code to avoid recreating the table because I would have lost all the users
+// ///////////////////////////////////////////////////////////////////
   @BeforeCreate({})
   static async generateCardNumber(card: Card) {
-    const cardNumber = await generateUniqueCardNumber();
+    // const cardNumber = await generateUniqueCardNumber();
+    //This piece of code lefted for 
   }
-
+//////////////////////////////////////////////////////////
+  
   @BelongsTo(() => User, 'user_id')
   user: User;
 
-  @AfterCreate
-  static async updateCardNumber(card: Card) {
-    const user = await card.$get('user'); // отримати власника карти
-    user.card_number = card.card_number; // оновити номер картки в користувача
-    await user.save(); // зберегти зміни в базі даних
-  }
+ 
 }
 
-export async function generateUniqueCardNumber(): Promise<string> {
-  const MAX_ATTEMPTS = 20;
-  let attempt = 0;
-
-  while (attempt < MAX_ATTEMPTS) {
-    const cardNumber = generateRandomCardNumber();
-    const card = await Card.findOne({ where: { card_number: cardNumber } });
-    if (!card) {
-      return cardNumber;
-    }
-    attempt++;
-  }
-
-  throw new Error('Could not generate unique card number');
-}
-
-function generateRandomCardNumber(): string {
-  const BIN = '5375'; // Bank Identification Number
-  const randomNumber = Math.floor(Math.random() * 999999999999); // 14-digit random number
-  const cardNumber =
-    BIN + randomNumber.toString().padStart(14 - BIN.length, '0'); // 16-digit card number
-  return cardNumber;
-}
-
-
-export async function generateCVV() {
-    const firstNumber = Math.floor(Math.random() * 9) + '';
-    const secondNumber = Math.floor(Math.random() * 9) + '';
-    const thirdNumber = Math.floor(Math.random() * 9) + '';
-    const CVV = firstNumber + secondNumber + thirdNumber;
-    return CVV;
-}

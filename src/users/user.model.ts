@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger/dist/decorators";
-import { BelongsTo, Column, DataType, HasMany, Model, Table,AfterCreate } from "sequelize-typescript";
+import { HasOne, Column, DataType, HasMany, Model, Table,AfterCreate } from "sequelize-typescript";
 import { Card } from "src/cards/card.model";
-
+import { UserCurrency } from "src/currency/userCurrency.model";
 
 interface UserCreationsAttrs{
     first_name: string,
@@ -71,4 +71,6 @@ export class User extends Model<User, UserCreationsAttrs> {
   cards: Card[];
   static user_id: number;
 
+  @HasOne(() => UserCurrency, 'user_id')
+  userCurrency: UserCurrency;
 }

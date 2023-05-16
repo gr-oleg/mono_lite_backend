@@ -1,5 +1,6 @@
 import { Model } from "sequelize-typescript";
 import { Card } from "src/cards/card.model";
+import { UserCurrency } from "src/currency/userCurrency.model";
 interface UserCreationsAttrs {
     first_name: string;
     second_name: string;
@@ -17,5 +18,6 @@ export declare class User extends Model<User, UserCreationsAttrs> {
     imageURL: string;
     cards: Card[];
     static user_id: number;
+    userCurrency: UserCurrency;
 }
 export {};

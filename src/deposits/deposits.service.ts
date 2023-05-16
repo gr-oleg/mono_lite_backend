@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Deposit } from './deposit.model';
 import { Card } from 'src/cards/card.model';
@@ -15,12 +15,22 @@ export class DepositsService {
   ) {}
 
   async createDeposit(dto: createDepositDto) {
-    const depositVault = await this.depositModel.create(dto);
-    await this.calcMonthlyPayment(depositVault);
-    await this.calcEndDate(depositVault);
-    this.makeTransaction('deposit', dto.user_id, dto.amount);
+    const currCard = await this.cardModel.findOne({
+      where: { user_id: dto.user_id },
+    });
 
-    return depositVault;
+    const isEnough = currCard.card_balance >= dto.amount;
+    if (isEnough) {
+      const depositVault = await this.depositModel.create(dto);
+      await this.calcMonthlyPayment(depositVault);
+      await this.calcEndDate(depositVault);
+      this.makeTransaction('deposit', dto.user_id, dto.amount);
+
+      return depositVault;
+    } else
+      throw new BadRequestException(
+        'А ти конкретний інвестор🤔 - Недостатньо коштів!',
+      );
   }
 
   async makeTransaction(operation: string, id: number, amount: number) {
@@ -62,16 +72,25 @@ export class DepositsService {
   }
 
   async updateAmountOfDeposit(dto: createDepositDto) {
-    const currVault = this.depositModel.findOne({
+    const currVault = await this.depositModel.findOne({
+      where: { user_id: dto.user_id },
+    });
+    const currCard = await this.cardModel.findOne({
       where: { user_id: dto.user_id },
     });
 
-    const updatedVault = (await currVault).update({
-      amount: (await currVault).amount + dto.amount,
-    });
-    await this.makeTransaction('deposit', dto.user_id, dto.amount);
-    await this.calcMonthlyPayment(await updatedVault);
-    return updatedVault;
+    const isEnough = currCard.card_balance >= dto.amount;
+    if (isEnough) {
+      const updatedVault = await currVault.update({
+        amount: currVault.amount + dto.amount,
+      });
+      await this.makeTransaction('deposit', dto.user_id, dto.amount);
+      await this.calcMonthlyPayment(updatedVault);
+      return updatedVault;
+    } else
+      throw new BadRequestException(
+        'А ти конкретний інвестор🤔 - Недостатньо коштів!',
+      );
   }
   @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_NOON)
   async payPercentage() {
@@ -91,8 +110,6 @@ export class DepositsService {
 
   async calcMonthlyPayment(vault: Deposit) {
     const totalAmount = vault.amount;
-    const termInMonths = vault.term;
-
     // Calculate monthly interest rate
     const monthlyInterestRate = vault.interest_rate / 12;
 
