@@ -87,22 +87,6 @@ export class Card extends Model<Card> {
   })
   blockReason: string;
 
-  // @ApiProperty({ example: '2000', description: 'Card Dollar Balance' })
-  // @Column({
-  //   type: DataType.FLOAT,
-  //   allowNull: false,
-  //   defaultValue: 0,
-  // })
-  // card_dollar_balance: number;
-
-  // @ApiProperty({ example: '2000', description: 'Card Euro Balance' })
-  // @Column({
-  //   type: DataType.FLOAT,
-  //   allowNull: false,
-  //   defaultValue: 0,
-  // })
-  // card_euro_balance: number;
-
   @BelongsTo(() => User, {
     foreignKey: 'user_id',
     targetKey: 'user_id',
