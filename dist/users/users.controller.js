@@ -19,7 +19,6 @@ const api_use_tags_decorator_1 = require("@nestjs/swagger/dist/decorators/api-us
 const create_user_dto_1 = require("./dto/create-user.dto");
 const user_model_1 = require("./user.model");
 const users_service_1 = require("./users.service");
-const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;

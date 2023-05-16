@@ -9,8 +9,6 @@ import { AuthModule } from 'src/auth/auth.module';
 import { CashbackModule } from 'src/cashback/cashback.module';
 import { CashBack } from 'src/cashback/cashback.model';
 import { User } from 'src/users/user.model';
-// import { Loan } from 'src/loans/loans.model';
-// import { LoansModule } from 'src/loans/loans.module';
 
 
 @Module({

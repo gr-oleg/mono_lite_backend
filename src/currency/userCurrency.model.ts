@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger/dist/decorators';
 import {
-  BeforeCreate,
   BelongsTo,
   Column,
   DataType,
@@ -8,7 +7,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { User } from 'src/users/user.model';
+import { User } from '../users/user.model';
 
 interface userCurrencyCreationAttrs {
   user_id: number;

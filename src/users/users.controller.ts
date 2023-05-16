@@ -4,7 +4,7 @@ import { ApiTags } from '@nestjs/swagger/dist/decorators/api-use-tags.decorator'
 import { createUserDto } from './dto/create-user.dto';
 import { User } from './user.model';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
 
 
 @ApiTags('Users')

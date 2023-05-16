@@ -6,7 +6,6 @@ import { PiggyBank } from './piggybank.model';
 import { User } from 'src/users/user.model';
 import { TransactionsModule } from 'src/transactions/transactions.module';
 import { CardsModule } from 'src/cards/cards.module';
-import { CardsService } from 'src/cards/cards.service';
 import { Card } from 'src/cards/card.model';
 import { Transaction } from 'src/transactions/transactions.model';
 

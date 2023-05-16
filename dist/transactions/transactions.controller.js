@@ -14,8 +14,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionsController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const create_transaction_dto_1 = require("./dto/create-transaction.dto");
 const transactions_service_1 = require("./transactions.service");
+const transactions_model_1 = require("./transactions.model");
 let TransactionsController = class TransactionsController {
     constructor(transactionService) {
         this.transactionService = transactionService;
@@ -29,14 +31,20 @@ let TransactionsController = class TransactionsController {
     simulateWithdrawal(dto) {
         return this.transactionService.simulateWithdrawal(dto);
     }
-    getUserTransactions(id) {
-        return this.transactionService.getUsersTransactions(id);
+    getUserTransactions(userId) {
+        return this.transactionService.getUsersTransactions(userId);
     }
     getAllTransactions() {
         return this.transactionService.getAllTransactions();
     }
 };
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new transaction' }),
+    (0, swagger_1.ApiBody)({ type: create_transaction_dto_1.createTransactionDto }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'The transaction has been created successfully.',
+    }),
     (0, common_1.Post)('/new'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -44,6 +52,12 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TransactionsController.prototype, "createTransaction", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Simulate a deposit transaction' }),
+    (0, swagger_1.ApiBody)({ type: create_transaction_dto_1.createTransactionDto }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'The deposit transaction simulation was successful.',
+    }),
     (0, common_1.Post)('/simulate/deposit'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -51,6 +65,12 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TransactionsController.prototype, "simulateDeposit", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Simulate a withdrawal transaction' }),
+    (0, swagger_1.ApiBody)({ type: create_transaction_dto_1.createTransactionDto }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'The withdrawal transaction simulation was successful.',
+    }),
     (0, common_1.Post)('/simulate/withdrawal'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -58,19 +78,30 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TransactionsController.prototype, "simulateWithdrawal", null);
 __decorate([
-    (0, common_1.Get)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, swagger_1.ApiOperation)({ summary: 'Get user transactions by ID' }),
+    (0, swagger_1.ApiParam)({
+        name: 'user_id',
+        type: 'number',
+        example: 1,
+        description: 'The ID of the user.',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: [transactions_model_1.Transaction] }),
+    (0, common_1.Get)('/:user_id'),
+    __param(0, (0, common_1.Param)('user_id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], TransactionsController.prototype, "getUserTransactions", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Get all transactions' }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: [transactions_model_1.Transaction] }),
     (0, common_1.Get)('/all'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], TransactionsController.prototype, "getAllTransactions", null);
 TransactionsController = __decorate([
+    (0, swagger_1.ApiTags)('Transactions'),
     (0, common_1.Controller)('transactions'),
     __metadata("design:paramtypes", [transactions_service_1.TransactionsService])
 ], TransactionsController);

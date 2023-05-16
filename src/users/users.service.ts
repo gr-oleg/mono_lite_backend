@@ -5,7 +5,7 @@ import { createUserDto } from './dto/create-user.dto';
 
 import { User } from './user.model';
 import * as bcrypt from 'bcryptjs';
-import { Card } from 'src/cards/card.model';
+import { Card } from '../cards/card.model';
 
 
 @Injectable()

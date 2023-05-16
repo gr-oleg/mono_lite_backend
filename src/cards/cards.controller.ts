@@ -1,24 +1,21 @@
-import { Body, Controller, Post ,Get,Param} from '@nestjs/common';
-import {CreateCardDto} from './dto/create-card.dto'
+import {  Controller, Get, Param } from '@nestjs/common';
+import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { CardsService } from './cards.service';
 
-
+@ApiTags('Cards')
 @Controller('cards')
 export class CardsController {
-  constructor(private cardsService: CardsService) { }
+  constructor(private cardsService: CardsService) {}
 
-  @Post()
-    
-    @Get('/all')
-    getAll() {
-        return this.cardsService.getAllCards()
+  @Get('/all')
+  @ApiResponse({ status: 200, description: 'Retrieved all cards successfully' })
+  getAll() {
+    return this.cardsService.getAllCards();
   }
 
-    @Get('/:id')
-    getUserCard(@Param('id') id:number) { 
-      return this.cardsService.getCardById(id);
+  @Get('/:id')
+  @ApiResponse({ status: 200, description: 'Retrieved card successfully' })
+  getUserCard(@Param('id') id: number) {
+    return this.cardsService.getCardById(id);
   }
-  
-
-    
 }

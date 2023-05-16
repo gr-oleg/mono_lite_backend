@@ -13,6 +13,7 @@ exports.Transaction = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const card_model_1 = require("../cards/card.model");
 const sequelize_1 = require("sequelize");
+const swagger_1 = require("@nestjs/swagger");
 var TransactionStatus;
 (function (TransactionStatus) {
     TransactionStatus["SUCCESSFUL"] = "SUCCESSFUL";
@@ -21,6 +22,7 @@ var TransactionStatus;
 let Transaction = class Transaction extends sequelize_typescript_1.Model {
 };
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'Transaction ID' }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
@@ -30,6 +32,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "transaction_id", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'Sender Card ID' }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
@@ -37,6 +40,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "sender_card_id", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'John Doe', description: 'Sender Full Name' }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
@@ -45,6 +49,7 @@ __decorate([
 ], Transaction.prototype, "sender_full_name", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => card_model_1.Card),
+    (0, swagger_1.ApiProperty)({ example: 2, description: 'Receiver Card ID' }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
@@ -52,6 +57,10 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "receiver_card_id", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '1234567890123456',
+        description: 'Receiver Card Number',
+    }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
@@ -59,6 +68,7 @@ __decorate([
     __metadata("design:type", String)
 ], Transaction.prototype, "receiver_card_number", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Jane Smith', description: 'Receiver Full Name' }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
@@ -66,6 +76,10 @@ __decorate([
     __metadata("design:type", String)
 ], Transaction.prototype, "receiver_full_name", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'Payment for services',
+        description: 'Transaction Description',
+    }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.STRING,
         allowNull: true,
@@ -74,6 +88,7 @@ __decorate([
     __metadata("design:type", String)
 ], Transaction.prototype, "transaction_description", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 100, description: 'Transaction Amount' }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.FLOAT,
         allowNull: false,
@@ -81,6 +96,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "transaction_amount", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'deposit', description: 'Transaction Type' }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
@@ -88,6 +104,10 @@ __decorate([
     __metadata("design:type", String)
 ], Transaction.prototype, "transaction_type", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '2023-05-16T12:00:00.000Z',
+        description: 'Transaction Date',
+    }),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_1.DataTypes.DATE,
         allowNull: false,
@@ -96,10 +116,11 @@ __decorate([
     __metadata("design:type", Date)
 ], Transaction.prototype, "transaction_date", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'SUCCESSFUL', description: 'Transaction Status' }),
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_1.DataTypes.ENUM('success', 'failure'),
+        type: sequelize_1.DataTypes.ENUM('SUCCESSFUL', 'FAILED'),
         allowNull: false,
-        defaultValue: 'success',
+        defaultValue: 'SUCCESSFUL',
     }),
     __metadata("design:type", String)
 ], Transaction.prototype, "transaction_status", void 0);

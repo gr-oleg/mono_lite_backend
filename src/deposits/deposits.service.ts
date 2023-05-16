@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Deposit } from './deposit.model';
-import { Card } from 'src/cards/card.model';
-import { Transaction } from 'src/transactions/transactions.model';
+import { Card } from '../cards/card.model';
+import { Transaction } from '../transactions/transactions.model';
 import { createDepositDto } from './dto/createDeposit.dto';
 import { Cron, CronExpression } from '@nestjs/schedule/dist';
 

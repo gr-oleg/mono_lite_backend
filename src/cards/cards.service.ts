@@ -2,8 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Card } from './card.model';
 import { User } from '../users/user.model';
-// import { TransactionsService } from 'src/transactions/transactions.service';
-// import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class CardsService {

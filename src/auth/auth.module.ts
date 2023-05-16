@@ -4,10 +4,8 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CardsModule } from 'src/cards/cards.module';
-import { CardsService } from 'src/cards/cards.service';
 import { TransactionsModule } from 'src/transactions/transactions.module';
-import { TransactionsService } from 'src/transactions/transactions.service';
-import { UsersService } from 'src/users/users.service';
+
 
 
 

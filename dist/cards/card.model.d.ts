@@ -1,5 +1,5 @@
 import { Model } from 'sequelize-typescript';
-import { User } from 'src/users/user.model';
+import { User } from '../users/user.model';
 export declare class Card extends Model<Card> {
     card_id: number;
     user_id: number;

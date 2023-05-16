@@ -2,8 +2,8 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Loan } from './loans.model';
 import { createLoanDto } from './dto/createLoan.dto';
-import { Transaction } from 'src/transactions/transactions.model';
-import { Card } from 'src/cards/card.model';
+import { Transaction } from '../transactions/transactions.model';
+import { Card } from '../cards/card.model';
 import { Cron, CronExpression } from '@nestjs/schedule/dist';
 
 @Injectable()

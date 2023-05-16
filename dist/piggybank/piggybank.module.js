@@ -15,7 +15,6 @@ const piggybank_model_1 = require("./piggybank.model");
 const user_model_1 = require("../users/user.model");
 const transactions_module_1 = require("../transactions/transactions.module");
 const cards_module_1 = require("../cards/cards.module");
-const cards_service_1 = require("../cards/cards.service");
 const card_model_1 = require("../cards/card.model");
 const transactions_model_1 = require("../transactions/transactions.model");
 let PiggybankModule = class PiggybankModule {

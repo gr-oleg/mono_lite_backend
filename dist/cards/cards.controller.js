@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CardsController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const cards_service_1 = require("./cards.service");
 let CardsController = class CardsController {
     constructor(cardsService) {
@@ -27,20 +28,22 @@ let CardsController = class CardsController {
     }
 };
 __decorate([
-    (0, common_1.Post)(),
     (0, common_1.Get)('/all'),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Retrieved all cards successfully' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CardsController.prototype, "getAll", null);
 __decorate([
     (0, common_1.Get)('/:id'),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Retrieved card successfully' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], CardsController.prototype, "getUserCard", null);
 CardsController = __decorate([
+    (0, swagger_1.ApiTags)('Cards'),
     (0, common_1.Controller)('cards'),
     __metadata("design:paramtypes", [cards_service_1.CardsService])
 ], CardsController);

@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger/dist/decorators";
 import { HasOne, Column, DataType, HasMany, Model, Table,AfterCreate } from "sequelize-typescript";
-import { Card } from "src/cards/card.model";
-import { UserCurrency } from "src/currency/userCurrency.model";
+import { Card } from "../cards/card.model";
+import { UserCurrency } from "../currency/userCurrency.model";
 
 interface UserCreationsAttrs{
     first_name: string,

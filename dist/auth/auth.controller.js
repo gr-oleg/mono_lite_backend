@@ -30,6 +30,8 @@ let AuthController = class AuthController {
 };
 __decorate([
     (0, common_1.Post)('/login'),
+    (0, swagger_1.ApiBody)({ type: create_user_dto_1.createUserDto }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User logged in successfully' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.createUserDto]),
@@ -37,6 +39,8 @@ __decorate([
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.Post)('/signUp'),
+    (0, swagger_1.ApiBody)({ type: create_user_dto_1.createUserDto }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'User registered successfully' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.createUserDto]),

@@ -7,10 +7,8 @@ import {
   ForeignKey,
   Model,
   Table,
-  AfterCreate,
-  HasMany,
 } from 'sequelize-typescript';
-import { User } from 'src/users/user.model';
+import { User } from '../users/user.model';
 
 @Table({ tableName: 'cards' })
 export class Card extends Model<Card> {

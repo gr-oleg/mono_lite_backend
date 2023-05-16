@@ -4,8 +4,8 @@ import { Currency } from './currency.model';
 import { currencyDto } from './dto/currency.dto';
 import { updateCurrencyBalanceDto } from './dto/updateBalance.dto';
 import { UserCurrency } from './userCurrency.model';
-import { Card } from 'src/cards/card.model';
-import { Transaction } from 'src/transactions/transactions.model';
+import { Card } from '../cards/card.model';
+import { Transaction } from '../transactions/transactions.model';
 
 @Injectable()
 export class CurrencyService {
