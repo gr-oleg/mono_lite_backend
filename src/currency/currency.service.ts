@@ -82,7 +82,6 @@ export class CurrencyService {
   async sellCurrency(dto: updateCurrencyBalanceDto) {
     const userCurrency = await this.getUserCurrencyEntity(dto.user_id);
     const currCard = await this.cardModel.findByPk(dto.user_id);
-    console.log(dto);
     const currency = await this.currencyModel.findOne({
       where: { currency_id: dto.currencyCode },
     });

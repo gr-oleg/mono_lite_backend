@@ -5,6 +5,7 @@ import { User } from '../users/user.model';
 
 @Injectable()
 export class CardsService {
+  
   constructor(
     @InjectModel(Card) private cardModel: typeof Card,
     @InjectModel(User) private userModel: typeof User,

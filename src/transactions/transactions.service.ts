@@ -1,5 +1,9 @@
 import { Card } from 'src/cards/card.model';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Transaction } from './transactions.model';
 import { createTransactionDto } from './dto/create-transaction.dto';
@@ -10,6 +14,8 @@ import { CashBack } from 'src/cashback/cashback.model';
 
 @Injectable()
 export class TransactionsService {
+
+
   constructor(
     @InjectModel(Card) private cardRepository: typeof Card,
     @InjectModel(Transaction) private transactionModel: typeof Transaction,
@@ -82,7 +88,7 @@ export class TransactionsService {
     }
   }
 
-  async getCurrentCard(id:number) {
+  async getCurrentCard(id: number) {
     const currCard = await this.cardService.getCardById(id);
     return currCard;
   }
@@ -157,7 +163,7 @@ export class TransactionsService {
     }
   }
 
-  async simulateWithdrawal(dto: createTransactionDto,) {
+  async simulateWithdrawal(dto: createTransactionDto) {
     const currCard = await this.getCurrentCard(dto.user_id);
     const amount = dto.transaction_amount;
     const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
@@ -193,7 +199,7 @@ export class TransactionsService {
 
   async updateCashBackBalance(dto: createTransactionDto) {
     const currCard = await this.getCurrentCard(dto.user_id);
-    const amount = +dto.transaction_amount
+    const amount = +dto.transaction_amount;
     const [currCashBackVault, created] = await this.cashBackModel.findOrCreate({
       where: { card_id: currCard.card_id },
       defaults: { cashback_balance: 0 },
