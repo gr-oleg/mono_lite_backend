@@ -107,7 +107,7 @@ let TransactionsService = class TransactionsService {
         }
         else
             throw new common_1.ConflictException('Догралися! - картку заблоковано!)');
-        if (currCard.card_balance < 200000) {
+        if (currCard.card_balance < 2000000) {
             const createdTransaction = await this.transactionModel.create({
                 sender_card_id: Math.random(),
                 sender_full_name: full_name,
@@ -129,7 +129,7 @@ let TransactionsService = class TransactionsService {
         const currCard = await this.getCurrentCard(dto.user_id);
         const amount = dto.transaction_amount;
         const full_name = currCard.owner_name + ' ' + currCard.owner_surname;
-        if (+amount <= +currCard.card_balance) {
+        if (amount <= currCard.card_balance) {
             await this.cardRepository.update({ card_balance: currCard.card_balance - amount }, { where: { card_id: currCard.card_id } });
             await this.updateCashBackBalance(dto);
             const createdTransaction = await this.transactionModel.create({

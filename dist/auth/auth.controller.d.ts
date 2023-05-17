@@ -9,4 +9,7 @@ export declare class AuthController {
     signUp(userDto: createUserDto): Promise<{
         token: string;
     }>;
+    refreshed(userDto: createUserDto): Promise<{
+        token: string;
+    }>;
 }

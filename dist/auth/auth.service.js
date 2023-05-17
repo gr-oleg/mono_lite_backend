@@ -64,6 +64,11 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Йой.. А голову ти дома не забув(ла) -- Пароль не вірний:(');
         }
     }
+    async refreshPage(dto) {
+        const user = await this.userService.getUserById(dto.id);
+        const token = this.generateToken(user);
+        return token;
+    }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),

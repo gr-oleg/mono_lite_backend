@@ -15,4 +15,7 @@ export declare class AuthService {
     }>;
     private generateToken;
     private validateUser;
+    refreshPage(dto: createUserDto): Promise<{
+        token: string;
+    }>;
 }

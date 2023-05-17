@@ -3,5 +3,6 @@ export declare class createUserDto {
     readonly second_name: string;
     readonly email: string;
     readonly password: string;
+    readonly id: number;
     readonly imageURL: string;
 }

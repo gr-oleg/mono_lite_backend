@@ -27,6 +27,9 @@ let AuthController = class AuthController {
     signUp(userDto) {
         return this.authService.signUp(userDto);
     }
+    refreshed(userDto) {
+        return this.authService.refreshPage(userDto);
+    }
 };
 __decorate([
     (0, common_1.Post)('/login'),
@@ -46,6 +49,15 @@ __decorate([
     __metadata("design:paramtypes", [create_user_dto_1.createUserDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signUp", null);
+__decorate([
+    (0, common_1.Post)('/refresh'),
+    (0, swagger_1.ApiBody)({ type: create_user_dto_1.createUserDto }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'User registered successfully' }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_user_dto_1.createUserDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "refreshed", null);
 AuthController = __decorate([
     (0, swagger_1.ApiTags)('Authentication'),
     (0, common_1.Controller)('auth'),

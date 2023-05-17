@@ -14,11 +14,6 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const card_model_1 = require("../cards/card.model");
 const sequelize_1 = require("sequelize");
 const swagger_1 = require("@nestjs/swagger");
-var TransactionStatus;
-(function (TransactionStatus) {
-    TransactionStatus["SUCCESSFUL"] = "SUCCESSFUL";
-    TransactionStatus["FAILED"] = "FAILED";
-})(TransactionStatus || (TransactionStatus = {}));
 let Transaction = class Transaction extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -118,9 +113,9 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 'SUCCESSFUL', description: 'Transaction Status' }),
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_1.DataTypes.ENUM('SUCCESSFUL', 'FAILED'),
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'SUCCESSFUL',
+        defaultValue: 'success',
     }),
     __metadata("design:type", String)
 ], Transaction.prototype, "transaction_status", void 0);

@@ -1,8 +1,4 @@
 import { Model } from 'sequelize-typescript';
-declare enum TransactionStatus {
-    SUCCESSFUL = "SUCCESSFUL",
-    FAILED = "FAILED"
-}
 interface TransactionCreateAttrs {
     sender_card_id: number;
     sender_full_name: string;
@@ -24,6 +20,6 @@ export declare class Transaction extends Model<Transaction, TransactionCreateAtt
     transaction_amount: number;
     transaction_type: string;
     transaction_date: Date;
-    transaction_status: TransactionStatus;
+    transaction_status: string;
 }
 export {};

@@ -8,10 +8,7 @@ import { Card } from '../cards/card.model';
 import { DataTypes } from 'sequelize';
 import { ApiProperty } from '@nestjs/swagger';
 
-enum TransactionStatus {
-  SUCCESSFUL = 'SUCCESSFUL',
-  FAILED = 'FAILED',
-}
+
 
 interface TransactionCreateAttrs {
   sender_card_id: number;
@@ -113,9 +110,9 @@ export class Transaction extends Model<Transaction, TransactionCreateAttrs> {
 
   @ApiProperty({ example: 'SUCCESSFUL', description: 'Transaction Status' })
   @Column({
-    type: DataTypes.ENUM('SUCCESSFUL', 'FAILED'),
+    type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'SUCCESSFUL',
+    defaultValue: 'success',
   })
-  transaction_status: TransactionStatus;
+  transaction_status: string;
 }
