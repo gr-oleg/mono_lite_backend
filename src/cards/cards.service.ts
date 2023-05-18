@@ -35,6 +35,8 @@ export class CardsService {
       blockReason: '',
     });
 
+    await user.update({ card_number: cardNumber });
+
     return card;
   }
 

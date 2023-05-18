@@ -21,12 +21,5 @@ export class AuthController {
   signUp(@Body() userDto: createUserDto) {
     return this.authService.signUp(userDto);
   }
-  @Post('/refresh')
-  @ApiBody({ type: createUserDto })
-  @ApiResponse({ status: 201, description: 'User registered successfully' })
-  refreshed(@Body() userDto: createUserDto) {
-    return this.authService.refreshPage(userDto);
-  }
-
 
 }

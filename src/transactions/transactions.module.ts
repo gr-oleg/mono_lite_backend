@@ -5,7 +5,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Transaction } from './transactions.model';
 import { Card } from 'src/cards/card.model';
 import { CardsModule } from 'src/cards/cards.module';
-import { AuthModule } from 'src/auth/auth.module';
+// import { AuthModule } from 'src/auth/auth.module';
 import { CashbackModule } from 'src/cashback/cashback.module';
 import { CashBack } from 'src/cashback/cashback.model';
 import { User } from 'src/users/user.model';
@@ -16,7 +16,7 @@ import { User } from 'src/users/user.model';
   providers: [TransactionsService],
   imports: [
         forwardRef(() => CardsModule),
-        forwardRef(() => AuthModule),
+        // forwardRef(() => AuthModule),
     forwardRef(() => CashbackModule),
     // forwardRef(() => LoansModule),
         

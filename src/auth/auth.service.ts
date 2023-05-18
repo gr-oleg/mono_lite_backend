@@ -77,9 +77,5 @@ export class AuthService {
       );
     }
   }
-  async refreshPage(dto: createUserDto) {
-    const user = await this.userService.getUserById(dto.id);
-    const token = this.generateToken(user);
-    return token
-  }
+
 }

@@ -7,7 +7,6 @@ import {
 import { InjectModel } from '@nestjs/sequelize';
 import { Transaction } from './transactions.model';
 import { createTransactionDto } from './dto/create-transaction.dto';
-import { AuthService } from 'src/auth/auth.service';
 import { CardsService } from 'src/cards/cards.service';
 import { Op } from 'sequelize';
 import { CashBack } from 'src/cashback/cashback.model';
@@ -20,7 +19,6 @@ export class TransactionsService {
     @InjectModel(Card) private cardRepository: typeof Card,
     @InjectModel(Transaction) private transactionModel: typeof Transaction,
     @InjectModel(CashBack) private cashBackModel: typeof CashBack,
-    private authService: AuthService,
     private cardService: CardsService,
   ) {}
 
